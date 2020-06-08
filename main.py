@@ -1,6 +1,7 @@
 import numpy as np
 import os
 import matplotlib.pyplot as plt
+from generatecoordinates import second_coordinates
 
 # This function will return a numpy array from the fort files.
 def generate_array(file):
@@ -19,6 +20,8 @@ def generate_data(level):
     elif level == 4:
         return fort15data, fort30data, fort40data
 
+def coordinate_array():
+    second_coordinates("fort.15")
 
 # Taylor Series Calculations. Find a way to find each point...?
 def taylor_series(level):
@@ -56,6 +59,7 @@ def plot_from_tuples(data):
 # It is interesting to note that if the below code is added, then the plot is a linear graph...
 #    plt.xscale('log')
 #    plt.yscale('log')
+
     plt.show()
 
 # Check that the signs of the values are correct. I don't anticipate that the signs need to change.
@@ -70,6 +74,8 @@ def summation_of_terms(z):
     plot_from_tuples(points)
 
 
-summation_of_terms(10)
+# summation_of_terms(10)
 
 # Still need to add curve fitting to get a function out.
+
+coordinate_array()
