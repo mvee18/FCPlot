@@ -21,7 +21,8 @@ def generate_data(level):
         return fort15data, fort30data, fort40data
 
 def coordinate_array():
-    second_coordinates("fort.15")
+    second_coords = second_coordinates("fort.15")
+    return second_coords
 
 # Taylor Series Calculations. Find a way to find each point...?
 def taylor_series(level):
@@ -45,16 +46,19 @@ def taylor_series(level):
 # These are the z3 displacements.
 f_constants = [0.21817255812613368, -0.17041516191284814, -0.8302383821581545]
 
+referenceE = -76.369839621528
+
 f1 = abs(f_constants[0])
 f2 = abs(f_constants[1])
 f3 = abs(f_constants[2])
 
 def plot_from_tuples(data):
-    y_val = [x[0] for x in data]
-    x_val = [x[1] for x in data]
+    x_val = [x[0] for x in data]
+    y_val = [x[1] for x in data]
 
-    plt.plot(x_val, y_val)
-    plt.plot(x_val, y_val, 'or')
+    plt.plot(x_val, y_val, color="k", marker="o")
+#    plt.autoscale(enable=True, axis="y", tight=False)
+#    plt.plot(x_val, y_val, 'or')
 
 # It is interesting to note that if the below code is added, then the plot is a linear graph...
 #    plt.xscale('log')
@@ -63,19 +67,22 @@ def plot_from_tuples(data):
     plt.show()
 
 # Check that the signs of the values are correct. I don't anticipate that the signs need to change.
-
+# TODO: Implement a curve fitting method.
 def summation_of_terms(z):
     points = []
 
     for x in range(z):
-        print(x)
-        points.append((0 + (f1/2)*(x**2) + (f2/6)*(x**3) + (f3/24)*(x**4), x))
+        y = (referenceE + (f1/2)*(x**2) + (f2/6)*(x**3) + (f3/24)*(x**4))
+        print(y)
+        points.append((x, relative_energy(y)))
 
+    print(points)
     plot_from_tuples(points)
 
+def relative_energy(energy):
+    rel_energy = abs((energy - referenceE)) / abs(referenceE)
+    return rel_energy
 
-# summation_of_terms(10)
 
-# Still need to add curve fitting to get a function out.
-
-coordinate_array()
+summation_of_terms(10)
+# coordinate_array()

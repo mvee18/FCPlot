@@ -57,6 +57,3 @@ def compare_coordinates(shape):
 
 def second_coordinates(fort_file):
     generate_second_coordinates(read_first_line(fort_file))
-
-
-second_coordinates("fort.15")
