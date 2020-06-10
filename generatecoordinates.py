@@ -1,11 +1,12 @@
 import numpy as np
 
+# This works. Or we could just use the array.size from the main file.
 def read_first_line(fort_file):
     f = open(fort_file, "r")
     lines = f.readlines()
     first_line = lines[0].split()
-    size = (int(first_line[0]), int(first_line[1]))
-    return size
+    size_of_line = (int(first_line[0]), int(first_line[1]))
+    return size_of_line
 
 
 def generate_second_coordinates(size):
@@ -34,12 +35,12 @@ def convert(coordinates):
     return res
 
 
-def compare_coordinates(shape):
-    for i in range(shape[0]):
-        for j in range(shape[1]):
+def compare_coordinates(shape_array):
+    for i in range(shape_array[0]):
+        for j in range(shape_array[1]):
             found = False
-            for k in range(shape[2]):
-                for L in range(shape[3]):
+            for k in range(shape_array[2]):
+                for L in range(shape_array[3]):
                     if i == k and j == L:
                         value = (i, j, k, L)
                         res = convert(value)

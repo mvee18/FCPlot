@@ -8,6 +8,7 @@ def generate_array(file):
     path = os.path.join(file)
     return np.asarray(np.genfromtxt(path, skip_header=1))
 
+
 # This function will return the array specific to each given der. level, using the above function.
 def generate_data(level):
     fort15data = generate_array("fort.15")
@@ -21,26 +22,41 @@ def generate_data(level):
     elif level == 4:
         return fort15data, fort30data, fort40data
 
+
 # This function calls from generatecoordinates.py to generate the list of coordinates in base 3 (0 0 0 0) ...
 def coordinate_array():
     second_coords = second_coordinates("fort.15")
     return second_coords
+
 
 # Taylor Series Calculations. Find a way to find each point...?
 # TODO: Integrate this into the plotting functions.
 def taylor_series(level):
     if level == 2:
         data = generate_data(2)
-        print(data[0][16][2])
+        iterate_data(data, 0, 0)
     elif level == 3:
         data = generate_data(3)
-        print(data[0][16][2])
+        iterate_data(data[0], data[1], 0)
     elif level == 4:
         data = generate_data(4)
-        print(data[0][16][2])
+        iterate_data(data[0], data[1], data[2])
     else:
         raise Exception("Invalid Level. Must be 2,3,4.")
 
+
+def iterate_data(array1, array2, array3):
+    size1 = array1.shape
+    array2 = 0
+    array3 = 0
+    for rows in range(size1[0]):
+        print(rows)
+        for cols in range(size1[1]):
+            print(cols)
+            print(array1[rows][cols])
+
+
+taylor_series(2)
 
 # These are the z2 displacements.
 # f_constants = [0.45961573569854314, 0.40010514709525397, -1.839080919045915]
@@ -100,5 +116,5 @@ def poly_fit(x, y):
     return x_new, y_new, z
 
 
-summation_of_terms(10)
+# summation_of_terms(10)
 # coordinate_array()
