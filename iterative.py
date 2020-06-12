@@ -2,12 +2,12 @@ import numpy as np
 import os
 import matplotlib.pyplot as plt
 from generatecoordinates import second_coordinates
+import time
 
 # This function will return a numpy array from the fort files.
 def generate_array(file):
     path = os.path.join(file)
     return np.asarray(np.genfromtxt(path, skip_header=1))
-
 
 # This function will return the array specific to each given der. level, using the above function.
 def generate_data(level):
@@ -34,58 +34,71 @@ def coordinate_array():
 def taylor_series(level):
     if level == 2:
         data = generate_data(2)
-        iterate_data(data, 0, 0)
+        iterate_array(data, np.empty((0, 0)), np.empty((0, 0)))
     elif level == 3:
         data = generate_data(3)
-        iterate_data(data[0], data[1], 0)
+        iterate_array(data[0], data[1], np.empty((0, 0)))
     elif level == 4:
         data = generate_data(4)
-        iterate_data(data[0], data[1], data[2])
+        iterate_array(data[0], data[1], data[2])
+
     else:
         raise Exception("Invalid Level. Must be 2,3,4.")
 
 
-def iterate_data(array1, array2, array3):
+def iterate_array(array1, array2, array3):
     size1 = array1.shape
-    array2 = 0
-    array3 = 0
+    size2 = array2.shape
+    size3 = array3.shape
+
     for rows in range(size1[0]):
-        print(rows)
         for cols in range(size1[1]):
-            print(cols)
-            print(array1[rows][cols])
+            f1 = (array1[rows][cols])
+            break
+        for rows2 in range(size2[0]):
+            for cols in range(size2[1]):
+                f2 = (array2[rows2][cols])
+                break
+            for rows3 in range(size3[0]):
+                for cols in range(size3[1]):
+                    f3 = (array3[rows3][cols])
+                    time.sleep(0.1)
+                    summation_of_terms(f1, f2, f3)
 
-
-taylor_series(2)
 
 # These are the z2 displacements.
 # f_constants = [0.45961573569854314, 0.40010514709525397, -1.839080919045915]
 
 # These are the z3 displacements.
-f_constants = [0.21817255812613368, -0.17041516191284814, -0.8302383821581545]
+# f_constants = [0.21817255812613368, -0.17041516191284814, -0.8302383821581545]
 
 referenceE = -76.369839621528
 
 # This list comprehension converts the f_constants given to their absolute values.
 # TODO: Decide whether or not this is beneficial / harmful. Seems to make little difference for the z3 displacements.
-# f_constants = [abs(x) for x in f_constants]
+"""
+f_constants = [abs(x) for x in f_constants]
 
 f1 = f_constants[0]
 f2 = f_constants[1]
 f3 = f_constants[2]
+"""
 
 # Check that the signs of the values are correct. I don't anticipate that the signs need to change.
 # TODO: Implement a curve fitting method. DONE!
-def summation_of_terms(z):
+c = 0
+
+def summation_of_terms(f1, f2, f3):
+    global c
     points = []
 
-    for x in range(z):
-        y = (referenceE + (f1/2)*(x**2) + (f2/6)*(x**3) + (f3/24)*(x**4))
-        # print(y)
-        points.append((x, relative_energy(y)))
-
+    y = (referenceE + (f1/2)*(c**2) + (f2/6)*(c**3) + (f3/24)*(c**4))
+    # print(y)
+    points.append((c, relative_energy(y)))
+    c += 1
+    print(points)
 #    print(points)i
-    plot_from_tuples(points)
+#    plot_from_tuples(points)
 
 
 def relative_energy(energy):
@@ -115,6 +128,6 @@ def poly_fit(x, y):
 
     return x_new, y_new, z
 
-
+taylor_series(4)
 # summation_of_terms(10)
 # coordinate_array()
