@@ -2,7 +2,6 @@ import numpy as np
 import os
 import matplotlib.pyplot as plt
 from generatecoordinates import second_coordinates
-import time
 
 # This function will return a numpy array from the fort files.
 def generate_array(file):
@@ -62,9 +61,9 @@ def iterate_array(array1, array2, array3):
             for rows3 in range(size3[0]):
                 for cols in range(size3[1]):
                     f3 = (array3[rows3][cols])
-                    time.sleep(0.1)
                     summation_of_terms(f1, f2, f3)
 
+    test_plot(points)
 
 # These are the z2 displacements.
 # f_constants = [0.45961573569854314, 0.40010514709525397, -1.839080919045915]
@@ -72,7 +71,9 @@ def iterate_array(array1, array2, array3):
 # These are the z3 displacements.
 # f_constants = [0.21817255812613368, -0.17041516191284814, -0.8302383821581545]
 
+
 referenceE = -76.369839621528
+
 
 # This list comprehension converts the f_constants given to their absolute values.
 # TODO: Decide whether or not this is beneficial / harmful. Seems to make little difference for the z3 displacements.
@@ -87,25 +88,32 @@ f3 = f_constants[2]
 # Check that the signs of the values are correct. I don't anticipate that the signs need to change.
 # TODO: Implement a curve fitting method. DONE!
 c = 0
+points = []
+
+# I just don't know what I'm supposed to use for x. Because if I use the original method,
+# there would be a ton of unrelated graphs.
 
 def summation_of_terms(f1, f2, f3):
     global c
-    points = []
-
+#    for x in range(10):
     y = (referenceE + (f1/2)*(c**2) + (f2/6)*(c**3) + (f3/24)*(c**4))
     # print(y)
     points.append((c, relative_energy(y)))
     c += 1
-    print(points)
 #    print(points)i
-#    plot_from_tuples(points)
-
+#   plot_from_tuples(points)
 
 def relative_energy(energy):
     rel_energy = abs((energy - referenceE)) / abs(referenceE)
     return rel_energy
 
+# TODO: Figure out the correct order to plot the points ... maybe sort by energy?
+def test_plot(data):
+    x_val = [x[0] for x in data]
+    y_val = [x[1] for x in data]
 
+    plt.scatter(x_val, y_val)
+    plt.show()
 # This function plots the data which is generate from the functions below.
 def plot_from_tuples(data):
     x_val = [x[0] for x in data]
@@ -127,6 +135,7 @@ def poly_fit(x, y):
     y_new = f(x_new)
 
     return x_new, y_new, z
+
 
 taylor_series(4)
 # summation_of_terms(10)
