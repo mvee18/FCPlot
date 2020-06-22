@@ -87,7 +87,7 @@ f3 = f_constants[2]
 
 # Check that the signs of the values are correct. I don't anticipate that the signs need to change.
 # TODO: Implement a curve fitting method. DONE!
-c = 0
+c = 0.00944863
 points = []
 
 # I just don't know what I'm supposed to use for x. Because if I use the original method,
@@ -99,8 +99,7 @@ def summation_of_terms(f1, f2, f3):
     y = (referenceE + (f1/2)*(c**2) + (f2/6)*(c**3) + (f3/24)*(c**4))
     # print(y)
     points.append((c, relative_energy(y)))
-    c += 1
-#    print(points)i
+#   print(points)
 #   plot_from_tuples(points)
 
 def relative_energy(energy):
@@ -109,6 +108,7 @@ def relative_energy(energy):
 
 # TODO: Figure out the correct order to plot the points ... maybe sort by energy?
 def test_plot(data):
+    print(data)
     x_val = [x[0] for x in data]
     y_val = [x[1] for x in data]
 

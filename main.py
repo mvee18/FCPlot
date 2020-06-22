@@ -58,17 +58,21 @@ f1 = f_constants[0]
 f2 = f_constants[1]
 f3 = f_constants[2]
 
+c = 0.00944863
+
 # Check that the signs of the values are correct. I don't anticipate that the signs need to change.
 # TODO: Implement a curve fitting method. DONE!
 def summation_of_terms(z):
     points = []
 
     for x in range(z):
-        y = (referenceE + (f1/2)*(x**2) + (f2/6)*(x**3) + (f3/24)*(x**4))
+        x = x * c
+        y = (referenceE + 0 + (f1/2)*(x**2) + (f2/6)*(x**3) + (f3/24)*(x**4))
         # print(y)
-        points.append((x, relative_energy(y)))
-
-#    print(points)i
+#        points.append((x, relative_energy(y)))
+        print(x, y)
+        points.append((x, y))
+#    print(points)
     plot_from_tuples(points)
 
 
@@ -85,8 +89,10 @@ def plot_from_tuples(data):
     x_new, y_new, coeffs = poly_fit(x_val, y_val)
     print(coeffs)
 
+    plt.rcParams['axes.formatter.useoffset'] = False
     plt.plot(x_val, y_val, 'o', x_new, y_new)
-    plt.xlim([x_val[0]-1, x_val[-1] + 1])
+    plt.xlim([x_val[0]-0.005, x_val[-1] + 0.005])
+    plt.grid(True)
     plt.show()
 
 
@@ -100,5 +106,5 @@ def poly_fit(x, y):
     return x_new, y_new, z
 
 
-summation_of_terms(10)
+summation_of_terms(5)
 # coordinate_array()
