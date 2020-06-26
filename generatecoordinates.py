@@ -1,5 +1,6 @@
 import numpy as np
 
+
 # This works. Or we could just use the array.size from the main file.
 def read_first_line(fort_file):
     f = open(fort_file, "r")
@@ -28,6 +29,7 @@ def generate_second_coordinates(size):
     shape_four = array.shape
     return shape_four
 
+
 def convert(coordinates):
     s = [str(i) for i in coordinates]
     res = int("".join(s))
@@ -54,6 +56,7 @@ def yield_coordinates(shape_four):
                             yield i, j, k, L
                             # manipulate_geometry_second(i, j, k, l)
 
+
 # This function generates the array with all of the coordinates for the second derivatives using a generator expression.
 def second_coordinates(fort_file):
     second_coords = []
@@ -61,7 +64,6 @@ def second_coordinates(fort_file):
         second_coords.append(value)
 
     second_coords = np.asarray(second_coords)
-    print(second_coords)
     return second_coords
 
 
@@ -69,27 +71,27 @@ second_coordinates("fort.15")
 
 third_list = []
 
-def determine_atom(row, atom_number, item, third_array):
+def determine_atom(row, atom_number, item, array):
+    if int(array[row, atom_number, item]) // 3 == 0:
+        array[row, atom_number, item] = 0
+    elif int(array[row, atom_number, item]) // 3 == 1:
+        array[row, atom_number, item] = 1
+    elif int(array[row, atom_number, item]) // 3 == 2:
+        array[row, atom_number, item] = 2
 
-    if int(third_array[row, atom_number, item]) // 3 == 0:
-        third_array[row, atom_number, item] = 0
-    elif int(third_array[row, atom_number, item]) // 3 == 1:
-        third_array[row, atom_number, item] = 1
-    elif int(third_array[row, atom_number, item]) // 3 == 2:
-        third_array[row, atom_number, item] = 2
 
-def determine_coordinate(row, coordinate_number, item, third_array):
-    if int(third_array[row, coordinate_number, item]) % 3 == 0:
-        third_array[row, coordinate_number, item] = 0
-    elif int(third_array[row, coordinate_number, item]) % 3 == 1:
-        third_array[row, coordinate_number, item] = 1
-    elif int(third_array[row, coordinate_number, item]) % 3 == 2:
-        third_array[row, coordinate_number, item] = 2
+def determine_coordinate(row, coordinate_number, item, array):
+    if int(array[row, coordinate_number, item]) % 3 == 0:
+        array[row, coordinate_number, item] = 0
+    elif int(array[row, coordinate_number, item]) % 3 == 1:
+        array[row, coordinate_number, item] = 1
+    elif int(array[row, coordinate_number, item]) % 3 == 2:
+        array[row, coordinate_number, item] = 2
 
 
 def third_geometry():
     third_size = read_first_line("fort.30")
-    num_of_jobs = third_size[0]**2
+    num_of_jobs = third_size[0] ** 2
     for i in range(num_of_jobs):
         for j in range(num_of_jobs):
             for k in range(num_of_jobs):
@@ -112,8 +114,10 @@ def third_geometry():
             if pair == 1:
                 third_array[row, col, 1] = int(third_array[row, col, 1])
                 determine_coordinate(row, col, 1, third_array)
-    print(third_array)
-    print(third_array.shape)
+    #    print(third_array.shape)
+    return third_array
+
+
 """
     zipped_array = []
     for i in range(third_array_shape[0]):
@@ -137,3 +141,56 @@ col_list = []
 
 third_energy_array = []
 
+def determine_fourth_atom(row, atom_number, item, fourth_array):
+    if int(fourth_array[row, atom_number, item]) // 3 == 0:
+        fourth_array[row, atom_number, item] = 0
+    elif int(fourth_array[row, atom_number, item]) // 3 == 1:
+        fourth_array[row, atom_number, item] = 1
+    elif int(fourth_array[row, atom_number, item]) // 3 == 2:
+        fourth_array[row, atom_number, item] = 2
+
+
+def determine_fourth_coordinate(row, coordinate_number, item, fourth_array):
+    if int(fourth_array[row, coordinate_number, item]) % 3 == 0:
+        fourth_array[row, coordinate_number, item] = 0
+    elif int(fourth_array[row, coordinate_number, item]) % 3 == 1:
+        fourth_array[row, coordinate_number, item] = 1
+    elif int(fourth_array[row, coordinate_number, item]) % 3 == 2:
+        fourth_array[row, coordinate_number, item] = 2
+
+
+fourth_list = []
+
+
+def fourth_geometry():
+    fourth_size = read_first_line("fort.40")
+    num_of_jobs = fourth_size[0] ** 2
+    for w in range(num_of_jobs):
+        for x in range(num_of_jobs):
+            for y in range(num_of_jobs):
+                for z in range(num_of_jobs):
+                    if x <= w and y <= x and z <= y:
+                        fourth_list.append(((w, w), (x, x), (y, y), (z, z)))
+
+    fourth_array = np.asarray(fourth_list)
+
+    fourth_array_shape = fourth_array.shape
+
+    for row in range(fourth_array_shape[0]):
+        for col in range(fourth_array_shape[1]):
+            pair = 0
+            if pair == 0:
+                determine_fourth_atom(row, col, pair, fourth_array)
+    for col in range(fourth_array_shape[1]):
+        pair = 1
+        if pair == 1:
+            fourth_array[row, col, 1] = int(fourth_array[row, col, 1])
+            determine_fourth_coordinate(row, col, 1, fourth_array)
+
+    return fourth_array
+
+
+fourth = fourth_geometry()
+
+# for value in fourth:
+#    print(value)

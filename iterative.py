@@ -2,6 +2,8 @@ import numpy as np
 import os
 import matplotlib.pyplot as plt
 from generatecoordinates import second_coordinates
+from generatecoordinates import third_geometry
+from generatecoordinates import fourth_geometry
 
 # This function will return a numpy array from the fort files.
 def generate_array(file):
@@ -23,10 +25,14 @@ def generate_data(level):
 
 
 # This function calls from generatecoordinates.py to generate the list of coordinates in base 3 (0 0 0 0) ...
-def coordinate_array():
-    second_coords = second_coordinates("fort.15")
-    return second_coords
+second_coords = second_coordinates("fort.15")
+seconditer = iter(second_coords)
 
+third_coords = third_geometry()
+thirditer = iter(third_coords)
+
+fourth_coords = fourth_geometry()
+fourthiter = iter(fourth_coords)
 
 # Taylor Series Calculations. Find a way to find each point...?
 # TODO: Integrate this into the plotting functions.
@@ -53,17 +59,20 @@ def iterate_array(array1, array2, array3):
     for rows in range(size1[0]):
         for cols in range(size1[1]):
             f1 = (array1[rows][cols])
+            c2 = next(seconditer)
             break
         for rows2 in range(size2[0]):
             for cols in range(size2[1]):
                 f2 = (array2[rows2][cols])
+                c3 = next(thirditer)
                 break
             for rows3 in range(size3[0]):
                 for cols in range(size3[1]):
                     f3 = (array3[rows3][cols])
-                    summation_of_terms(f1, f2, f3)
+                    c4 = next(fourthiter)
+                    summation_of_terms(f1, f2, f3, c2, c3, c4)
 
-    test_plot(points)
+#    test_plot(points)
 
 # These are the z2 displacements.
 # f_constants = [0.45961573569854314, 0.40010514709525397, -1.839080919045915]
@@ -88,32 +97,48 @@ f3 = f_constants[2]
 # Check that the signs of the values are correct. I don't anticipate that the signs need to change.
 # TODO: Implement a curve fitting method. DONE!
 c = 0.00944863
-points = []
+energy_list = []
+function_list = []
 
 # I just don't know what I'm supposed to use for x. Because if I use the original method,
 # there would be a ton of unrelated graphs.
 
-def summation_of_terms(f1, f2, f3):
-    global c
-#    for x in range(10):
-    y = (referenceE + (f1/2)*(c**2) + (f2/6)*(c**3) + (f3/24)*(c**4))
-    # print(y)
-    points.append((c, relative_energy(y)))
-#   print(points)
-#   plot_from_tuples(points)
+def summation_of_terms(f1, f2, f3, c2, c3, c4):
+    points = []
+    for x in range(5):
+        x = x * c
+        y = (referenceE + 0 + (f1 / 2) * (x ** 2) + (f2 / 6) * (x ** 3) + (f3 / 24) * (x ** 4))
+        # points.append((x, relative_energy(y)))
+#        print(x, y)
+        points.append((x, y))
+    #    print(points)
+#    plot_from_tuples(points)
+    yield_coefficients(points, c2, c3, c4)
+
 
 def relative_energy(energy):
     rel_energy = abs((energy - referenceE)) / abs(referenceE)
     return rel_energy
 
+
 # TODO: Figure out the correct order to plot the points ... maybe sort by energy?
 def test_plot(data):
-    print(data)
     x_val = [x[0] for x in data]
     y_val = [x[1] for x in data]
 
     plt.scatter(x_val, y_val)
     plt.show()
+
+
+# This function is similar to plot_from_tuples, but instead appends the coordinates used and the function.
+def yield_coefficients(data, c2, c3, c4):
+    x_val = [x[0] for x in data]
+    y_val = [x[1] for x in data]
+
+    x_new, y_new, coeffs = poly_fit(x_val, y_val)
+    function_list.append((c2, c3, c4, coeffs))
+    print(c2, c3, c4, coeffs)
+
 # This function plots the data which is generate from the functions below.
 def plot_from_tuples(data):
     x_val = [x[0] for x in data]
@@ -122,8 +147,10 @@ def plot_from_tuples(data):
     x_new, y_new, coeffs = poly_fit(x_val, y_val)
     print(coeffs)
 
+    plt.rcParams['axes.formatter.useoffset'] = False
     plt.plot(x_val, y_val, 'o', x_new, y_new)
-    plt.xlim([x_val[0]-1, x_val[-1] + 1])
+    plt.xlim([x_val[0]-0.005, x_val[-1] + 0.005])
+    plt.grid(True)
     plt.show()
 
 
