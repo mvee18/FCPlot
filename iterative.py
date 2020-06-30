@@ -24,15 +24,31 @@ def generate_data(level):
         return fort15data, fort30data, fort40data
 
 
-# This function calls from generatecoordinates.py to generate the list of coordinates in base 3 (0 0 0 0) ...
+def reset_iter(iterator):
+    global Reset_List
+    while True:
+        try:
+            value = next(iterator)
+            Reset_List.append(list(value))
+            print(value)
+        except StopIteration:
+            Reset_List = np.asarray(Reset_List)
+            print(Reset_List)
+            print("You must construct additional pylons.")
+            iterator = iter(Reset_List)
+            Reset_List = []
+            continue
+
+# These functions yield the iterators necessary in the next step.
+# TODO: Refactor this to use one function.
 second_coords = second_coordinates("fort.15")
-seconditer = iter(second_coords)
+second_iter = iter(second_coords)
 
 third_coords = third_geometry()
-thirditer = iter(third_coords)
+third_iter = iter(third_coords)
 
 fourth_coords = fourth_geometry()
-fourthiter = iter(fourth_coords)
+fourth_iter = iter(fourth_coords)
 
 # Taylor Series Calculations. Find a way to find each point...?
 # TODO: Integrate this into the plotting functions.
@@ -51,26 +67,60 @@ def taylor_series(level):
         raise Exception("Invalid Level. Must be 2,3,4.")
 
 
+Reset_List = []
 def iterate_array(array1, array2, array3):
     size1 = array1.shape
     size2 = array2.shape
     size3 = array3.shape
+    global Reset_List, second_iter, third_iter, fourth_iter
 
     for rows in range(size1[0]):
         for cols in range(size1[1]):
-            f1 = (array1[rows][cols])
-            c2 = next(seconditer)
-            break
+            try:
+                f1 = (array1[rows][cols])
+                c2 = next(second_iter)
+                Reset_List.append(list(c2))
+                break
+
+            except StopIteration:
+                Reset_List = np.asarray(Reset_List)
+                print(Reset_List)
+                print("You must construct additional pylons.")
+                second_iter = iter(Reset_List)
+                Reset_List = []
+                continue
+
         for rows2 in range(size2[0]):
             for cols in range(size2[1]):
-                f2 = (array2[rows2][cols])
-                c3 = next(thirditer)
-                break
+                try:
+                    f2 = (array2[rows2][cols])
+                    c3 = next(third_iter)
+                    Reset_List.append((list(c3)))
+                    break
+
+                except StopIteration:
+                    Reset_List = np.asarray(Reset_List)
+                    print(Reset_List)
+                    print("You must construct additional pylons.")
+                    third_iter = iter(Reset_List)
+                    Reset_List = []
+                    continue
+
             for rows3 in range(size3[0]):
                 for cols in range(size3[1]):
-                    f3 = (array3[rows3][cols])
-                    c4 = next(fourthiter)
-                    summation_of_terms(f1, f2, f3, c2, c3, c4)
+                    try:
+                        f3 = (array3[rows3][cols])
+                        c4 = next(fourth_iter)
+                        Reset_List.append((list(c4)))
+                        summation_of_terms(f1, f2, f3, c2, c3, c4)
+                        
+                    except StopIteration:
+                        Reset_List = np.asarray(Reset_List)
+                        print(Reset_List)
+                        print("You must construct additional pylons.")
+                        fourth_iter = iter(Reset_List)
+                        Reset_List = []
+                        continue
 
 #    test_plot(points)
 
@@ -167,3 +217,5 @@ def poly_fit(x, y):
 taylor_series(4)
 # summation_of_terms(10)
 # coordinate_array()
+
+print(function_list)

@@ -161,7 +161,8 @@ def determine_fourth_coordinate(row, coordinate_number, item, fourth_array):
 
 fourth_list = []
 
-
+# DONE: Fix generation of fourth points. It seems to create two arrays together...
+# FIXED: Second col loop was not correctly indented.
 def fourth_geometry():
     fourth_size = read_first_line("fort.40")
     num_of_jobs = fourth_size[0] ** 2
@@ -180,17 +181,20 @@ def fourth_geometry():
         for col in range(fourth_array_shape[1]):
             pair = 0
             if pair == 0:
-                determine_fourth_atom(row, col, pair, fourth_array)
-    for col in range(fourth_array_shape[1]):
-        pair = 1
-        if pair == 1:
-            fourth_array[row, col, 1] = int(fourth_array[row, col, 1])
-            determine_fourth_coordinate(row, col, 1, fourth_array)
+                determine_fourth_atom(row, col, 0, fourth_array)
 
-    return fourth_array
+        for col in range(fourth_array_shape[1]):
+            pair = 1
+            if pair == 1:
+                fourth_array[row, col, 1] = int(fourth_array[row, col, 1])
+                determine_fourth_coordinate(row, col, 1, fourth_array)
+
+    new_fourth = []
+    for value in fourth_array:
+        new_fourth.append(value)
+
+    return new_fourth
 
 
-fourth = fourth_geometry()
-
-# for value in fourth:
-#    print(value)
+for value in fourth_geometry():
+    print(value)
