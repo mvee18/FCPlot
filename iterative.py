@@ -95,7 +95,7 @@ def iterate_array(array1, array2, array3):
                 try:
                     f2 = (array2[rows2][cols])
                     c3 = next(third_iter)
-                    Reset_List.append((list(c3)))
+                    Reset_List.append(c3)
                     break
 
                 except StopIteration:
@@ -111,7 +111,7 @@ def iterate_array(array1, array2, array3):
                     try:
                         f3 = (array3[rows3][cols])
                         c4 = next(fourth_iter)
-                        Reset_List.append((list(c4)))
+                        Reset_List.append(c4)
                         summation_of_terms(f1, f2, f3, c2, c3, c4)
                         
                     except StopIteration:
@@ -218,4 +218,5 @@ taylor_series(4)
 # summation_of_terms(10)
 # coordinate_array()
 
+function_list = np.asarray(function_list)
 print(function_list)
