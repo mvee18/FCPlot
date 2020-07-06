@@ -43,6 +43,8 @@ def reset_iter(iterator):
 # TODO: Refactor this to use one function.
 second_coords = second_coordinates("fort.15")
 second_iter = iter(second_coords)
+print(second_coords)
+breakpoint()
 
 third_coords = third_geometry()
 third_iter = iter(third_coords)
@@ -68,12 +70,15 @@ def taylor_series(level):
 
 
 Reset_List = []
+Reset_List_Third = []
+Reset_List_Fourth = []
 def iterate_array(array1, array2, array3):
     size1 = array1.shape
     size2 = array2.shape
     size3 = array3.shape
-    global Reset_List, second_iter, third_iter, fourth_iter
+    global Reset_List, Reset_List_Third, Reset_List_Fourth, second_iter, third_iter, fourth_iter
 
+    print(array1)
     for rows in range(size1[0]):
         for cols in range(size1[1]):
             try:
@@ -95,15 +100,15 @@ def iterate_array(array1, array2, array3):
                 try:
                     f2 = (array2[rows2][cols])
                     c3 = next(third_iter)
-                    Reset_List.append(c3)
+                    Reset_List_Third.append(c3)
                     break
 
                 except StopIteration:
-                    Reset_List = np.asarray(Reset_List)
-                    print(Reset_List)
+                    Reset_List_Third = np.asarray(Reset_List_Third)
+                    print(Reset_List_Third)
                     print("You must construct additional pylons.")
-                    third_iter = iter(Reset_List)
-                    Reset_List = []
+                    third_iter = iter(Reset_List_Third)
+                    Reset_List_Third = []
                     continue
 
             for rows3 in range(size3[0]):
@@ -111,15 +116,15 @@ def iterate_array(array1, array2, array3):
                     try:
                         f3 = (array3[rows3][cols])
                         c4 = next(fourth_iter)
-                        Reset_List.append(c4)
+                        Reset_List_Fourth.append(c4)
                         summation_of_terms(f1, f2, f3, c2, c3, c4)
                         
                     except StopIteration:
-                        Reset_List = np.asarray(Reset_List)
-                        print(Reset_List)
+                        Reset_List_Fourth = np.asarray(Reset_List_Fourth)
+                        print(Reset_List_Fourth)
                         print("You must construct additional pylons.")
-                        fourth_iter = iter(Reset_List)
-                        Reset_List = []
+                        fourth_iter = iter(Reset_List_Fourth)
+                        Reset_List_Fourth = []
                         continue
 
 #    test_plot(points)
@@ -188,6 +193,7 @@ def yield_coefficients(data, c2, c3, c4):
     x_new, y_new, coeffs = poly_fit(x_val, y_val)
     function_list.append((c2, c3, c4, coeffs))
     print(c2, c3, c4, coeffs)
+#    breakpoint()
 
 # This function plots the data which is generate from the functions below.
 def plot_from_tuples(data):
@@ -219,4 +225,3 @@ taylor_series(4)
 # coordinate_array()
 
 function_list = np.asarray(function_list)
-print(function_list)

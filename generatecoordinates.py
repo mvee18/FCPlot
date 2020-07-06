@@ -102,7 +102,7 @@ def third_geometry():
 
     third_array_shape = third_array.shape
 
-    third_array = third_array.astype('object')
+#    third_array = third_array.astype('object')
 
     for row in range(third_array_shape[0]):
         for col in range(third_array_shape[1]):
