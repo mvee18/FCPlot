@@ -4,6 +4,7 @@ import matplotlib.pyplot as plt
 from generatecoordinates import second_coordinates
 from generatecoordinates import third_geometry
 from generatecoordinates import fourth_geometry
+import time
 
 # This function will return a numpy array from the fort files.
 def generate_array(file):
@@ -24,6 +25,7 @@ def generate_data(level):
         return fort15data, fort30data, fort40data
 
 
+Reset_List = []
 def reset_iter(iterator):
     global Reset_List
     while True:
@@ -35,7 +37,7 @@ def reset_iter(iterator):
             Reset_List = np.asarray(Reset_List)
             print(Reset_List)
             print("You must construct additional pylons.")
-            iterator = iter(Reset_List)
+            iterator = iter(third_coords)
             Reset_List = []
             continue
 
@@ -44,7 +46,6 @@ def reset_iter(iterator):
 # TODO: Refactor this to use one function.
 second_coords, third_coords, fourth_coords = second_coordinates("fort.15"), third_geometry(), fourth_geometry()
 second_iter, third_iter, fourth_iter = iter(second_coords), iter(third_coords), iter(fourth_coords)
-
 
 # Taylor Series Calculations. Find a way to find each point...?
 # TODO: Integrate this into the plotting functions.
@@ -70,22 +71,25 @@ def iterate_array(array1, array2, array3):
     size1 = array1.shape
     size2 = array2.shape
     size3 = array3.shape
+    print(size1, size2, size3)
+    print(len(second_coords), len(third_coords), len(fourth_coords))
+
     global Reset_List, Reset_List_Third, Reset_List_Fourth, second_iter, third_iter, fourth_iter
 
-    print(array1)
     for rows in range(size1[0]):
         for cols in range(size1[1]):
             try:
                 f1 = (array1[rows][cols])
                 c2 = next(second_iter)
                 Reset_List.append(list(c2))
+                print(rows, cols, f1, c2)
                 break
 
             except StopIteration:
                 Reset_List = np.asarray(Reset_List)
                 print(Reset_List)
                 print("You must construct additional pylons.")
-                second_iter = iter(Reset_List)
+                second_iter = iter(second_coords)
                 Reset_List = []
                 continue
 
@@ -101,7 +105,7 @@ def iterate_array(array1, array2, array3):
                     Reset_List_Third = np.asarray(Reset_List_Third)
                     print(Reset_List_Third)
                     print("You must construct additional pylons.")
-                    third_iter = iter(Reset_List_Third)
+                    third_iter = iter(third_coords)
                     Reset_List_Third = []
                     continue
 
@@ -112,12 +116,12 @@ def iterate_array(array1, array2, array3):
                         c4 = next(fourth_iter)
                         Reset_List_Fourth.append(c4)
                         summation_of_terms(f1, f2, f3, c2, c3, c4)
-                        
+
                     except StopIteration:
                         Reset_List_Fourth = np.asarray(Reset_List_Fourth)
                         print(Reset_List_Fourth)
                         print("You must construct additional pylons.")
-                        fourth_iter = iter(Reset_List_Fourth)
+                        fourth_iter = iter(fourth_coords)
                         Reset_List_Fourth = []
                         continue
 

@@ -1,0 +1,4 @@
+The function array is off by one on each iteration.
+When the previous loop ends, the next one loops n iterations too early.
+The first loop is correct, but the next one starts 1 iteration too early.
+The second loop is 2 loops ... etc.

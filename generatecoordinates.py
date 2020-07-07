@@ -194,7 +194,3 @@ def fourth_geometry():
         new_fourth.append(value)
 
     return new_fourth
-
-
-for value in fourth_geometry():
-    print(value)
