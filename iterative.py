@@ -39,18 +39,12 @@ def reset_iter(iterator):
             Reset_List = []
             continue
 
+
 # These functions yield the iterators necessary in the next step.
 # TODO: Refactor this to use one function.
-second_coords = second_coordinates("fort.15")
-second_iter = iter(second_coords)
-print(second_coords)
-breakpoint()
+second_coords, third_coords, fourth_coords = second_coordinates("fort.15"), third_geometry(), fourth_geometry()
+second_iter, third_iter, fourth_iter = iter(second_coords), iter(third_coords), iter(fourth_coords)
 
-third_coords = third_geometry()
-third_iter = iter(third_coords)
-
-fourth_coords = fourth_geometry()
-fourth_iter = iter(fourth_coords)
 
 # Taylor Series Calculations. Find a way to find each point...?
 # TODO: Integrate this into the plotting functions.

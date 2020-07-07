@@ -12,6 +12,14 @@ Coordinate Count as x coord.png
 
 .idea/modules.xml
 
+<<<<<<< Updated upstream
 .idea/vcs.xml
 
 .idea*
+=======
+.idea/other.xml
+
+.idea/vcs.xml
+>>>>>>> Stashed changes
+
+looping.py
