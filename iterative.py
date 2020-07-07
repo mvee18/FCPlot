@@ -13,9 +13,9 @@ def generate_array(file):
 
 # This function will return the array specific to each given der. level, using the above function.
 def generate_data(level):
-    fort15data = generate_array("fort.15")
-    fort30data = generate_array("fort.30")
-    fort40data = generate_array("fort.40")
+    fort15data = generate_array("fort_files/fort.15")
+    fort30data = generate_array("fort_files/fort.30")
+    fort40data = generate_array("fort_files/fort.40")
 
     if level == 2:
         return fort15data
@@ -44,7 +44,8 @@ def reset_iter(iterator):
 
 # These functions yield the iterators necessary in the next step.
 # TODO: Refactor this to use one function.
-second_coords, third_coords, fourth_coords = second_coordinates("fort.15"), third_geometry(), fourth_geometry()
+second_coords, third_coords, fourth_coords = second_coordinates(
+    "fort_files/fort.15"), third_geometry(), fourth_geometry()
 second_iter, third_iter, fourth_iter = iter(second_coords), iter(third_coords), iter(fourth_coords)
 
 # Taylor Series Calculations. Find a way to find each point...?

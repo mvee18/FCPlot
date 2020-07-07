@@ -67,7 +67,7 @@ def second_coordinates(fort_file):
     return second_coords
 
 
-second_coordinates("fort.15")
+second_coordinates("fort_files/fort.15")
 
 third_list = []
 
@@ -90,7 +90,7 @@ def determine_coordinate(row, coordinate_number, item, array):
 
 
 def third_geometry():
-    third_size = read_first_line("fort.30")
+    third_size = read_first_line("fort_files/fort.30")
     num_of_jobs = third_size[0] ** 2
     for i in range(num_of_jobs):
         for j in range(num_of_jobs):
@@ -164,7 +164,7 @@ fourth_list = []
 # DONE: Fix generation of fourth points. It seems to create two arrays together...
 # FIXED: Second col loop was not correctly indented.
 def fourth_geometry():
-    fourth_size = read_first_line("fort.40")
+    fourth_size = read_first_line("fort_files/fort.40")
     num_of_jobs = fourth_size[0] ** 2
     for w in range(num_of_jobs):
         for x in range(num_of_jobs):

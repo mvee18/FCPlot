@@ -10,9 +10,9 @@ def generate_array(file):
 
 # This function will return the array specific to each given der. level, using the above function.
 def generate_data(level):
-    fort15data = generate_array("fort.15")
-    fort30data = generate_array("fort.30")
-    fort40data = generate_array("fort.40")
+    fort15data = generate_array("fort_files/fort.15")
+    fort30data = generate_array("fort_files/fort.30")
+    fort40data = generate_array("fort_files/fort.40")
 
     if level == 2:
         return fort15data
@@ -23,7 +23,7 @@ def generate_data(level):
 
 # This function calls from generatecoordinates.py to generate the list of coordinates in base 3 (0 0 0 0) ...
 def coordinate_array():
-    second_coords = second_coordinates("fort.15")
+    second_coords = second_coordinates("fort_files/fort.15")
     return second_coords
 
 # Taylor Series Calculations. Find a way to find each point...?
