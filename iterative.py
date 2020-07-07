@@ -4,12 +4,13 @@ import matplotlib.pyplot as plt
 from generatecoordinates import second_coordinates
 from generatecoordinates import third_geometry
 from generatecoordinates import fourth_geometry
-import time
+
 
 # This function will return a numpy array from the fort files.
 def generate_array(file):
     path = os.path.join(file)
     return np.asarray(np.genfromtxt(path, skip_header=1))
+
 
 # This function will return the array specific to each given der. level, using the above function.
 def generate_data(level):
@@ -26,6 +27,8 @@ def generate_data(level):
 
 
 Reset_List = []
+
+
 def reset_iter(iterator):
     global Reset_List
     while True:
@@ -65,66 +68,79 @@ def taylor_series(level):
         raise Exception("Invalid Level. Must be 2,3,4.")
 
 
-Reset_List = []
 Reset_List_Third = []
 Reset_List_Fourth = []
+
+
 def iterate_array(array1, array2, array3):
-    size1 = array1.shape
+    size1 = array1.shape  # (3, 27)
     size2 = array2.shape
     size3 = array3.shape
     print(size1, size2, size3)
     print(len(second_coords), len(third_coords), len(fourth_coords))
 
     global Reset_List, Reset_List_Third, Reset_List_Fourth, second_iter, third_iter, fourth_iter
-
-    for rows in range(size1[0]):
-        for cols in range(size1[1]):
-            try:
-                f1 = (array1[rows][cols])
-                c2 = next(second_iter)
-                Reset_List.append(list(c2))
-                print(rows, cols, f1, c2)
-                break
-
-            except StopIteration:
-                Reset_List = np.asarray(Reset_List)
-                print(Reset_List)
-                print("You must construct additional pylons.")
-                second_iter = iter(second_coords)
-                Reset_List = []
-                continue
-
-        for rows2 in range(size2[0]):
-            for cols in range(size2[1]):
+    count = 0
+    while count <= 12:
+        for rows in range(size1[0]):
+            count += 1
+            for cols in range(size1[1]):
                 try:
-                    f2 = (array2[rows2][cols])
-                    c3 = next(third_iter)
-                    Reset_List_Third.append(c3)
+                    f1 = (array1[rows][cols])
+                    c2 = next(second_iter)
+                    Reset_List.append(list(c2))
+                    print(rows, cols, f1, c2)
                     break
 
                 except StopIteration:
-                    Reset_List_Third = np.asarray(Reset_List_Third)
-                    print(Reset_List_Third)
-                    print("You must construct additional pylons.")
-                    third_iter = iter(third_coords)
-                    Reset_List_Third = []
+                    Reset_List = np.asarray(Reset_List)
+                    # print(Reset_List)
+                    # print("You must construct additional pylons.")
+                    second_iter = iter(second_coords)
+                    f1 = (array1[rows][cols])
+                    c2 = next(second_iter)
+
+                    Reset_List = []
                     continue
 
-            for rows3 in range(size3[0]):
-                for cols in range(size3[1]):
+            for rows2 in range(size2[0]):
+                for cols in range(size2[1]):
                     try:
-                        f3 = (array3[rows3][cols])
-                        c4 = next(fourth_iter)
-                        Reset_List_Fourth.append(c4)
-                        summation_of_terms(f1, f2, f3, c2, c3, c4)
+                        f2 = (array2[rows2][cols])
+                        c3 = next(third_iter)
+                        Reset_List_Third.append(c3)
+                        break
 
                     except StopIteration:
-                        Reset_List_Fourth = np.asarray(Reset_List_Fourth)
-                        print(Reset_List_Fourth)
-                        print("You must construct additional pylons.")
-                        fourth_iter = iter(fourth_coords)
-                        Reset_List_Fourth = []
+                        Reset_List_Third = np.asarray(Reset_List_Third)
+    #                   print(Reset_List_Third)
+    #                   print("You must construct additional pylons.")
+
+                        third_iter = iter(third_coords)
+                        f2 = (array2[rows2][cols])
+                        c3 = next(third_iter)
+
+                        Reset_List_Third = []
                         continue
+
+                for rows3 in range(size3[0]):
+                    for cols in range(size3[1]):
+                        try:
+                            f3 = (array3[rows3][cols])
+                            c4 = next(fourth_iter)
+                            Reset_List_Fourth.append(c4)
+                            summation_of_terms(f1, f2, f3, c2, c3, c4)
+
+                        except StopIteration:
+                            Reset_List_Fourth = np.asarray(Reset_List_Fourth)
+    #                       print(Reset_List_Fourth)
+    #                       print("You must construct additional pylons.")
+                            fourth_iter = iter(fourth_coords)
+                            f3 = (array3[rows][cols])
+                            c4 = next(fourth_iter)
+                            Reset_List_Fourth = []
+                            summation_of_terms(f1, f2, f3, c2, c3, c4)
+                            continue
 
 #    test_plot(points)
 
@@ -136,7 +152,6 @@ def iterate_array(array1, array2, array3):
 
 
 referenceE = -76.369839621528
-
 
 # This list comprehension converts the f_constants given to their absolute values.
 # TODO: Decide whether or not this is beneficial / harmful. Seems to make little difference for the z3 displacements.
@@ -154,6 +169,7 @@ c = 0.00944863
 energy_list = []
 function_list = []
 
+
 # I just don't know what I'm supposed to use for x. Because if I use the original method,
 # there would be a ton of unrelated graphs.
 
@@ -163,10 +179,10 @@ def summation_of_terms(f1, f2, f3, c2, c3, c4):
         x = x * c
         y = (referenceE + 0 + (f1 / 2) * (x ** 2) + (f2 / 6) * (x ** 3) + (f3 / 24) * (x ** 4))
         # points.append((x, relative_energy(y)))
-#        print(x, y)
+        #        print(x, y)
         points.append((x, y))
     #    print(points)
-#    plot_from_tuples(points)
+    #    plot_from_tuples(points)
     yield_coefficients(points, c2, c3, c4)
 
 
@@ -191,8 +207,11 @@ def yield_coefficients(data, c2, c3, c4):
 
     x_new, y_new, coeffs = poly_fit(x_val, y_val)
     function_list.append((c2, c3, c4, coeffs))
-    print(c2, c3, c4, coeffs)
+
+
+#    print(c2, c3, c4, coeffs)
 #    breakpoint()
+
 
 # This function plots the data which is generate from the functions below.
 def plot_from_tuples(data):
@@ -204,7 +223,7 @@ def plot_from_tuples(data):
 
     plt.rcParams['axes.formatter.useoffset'] = False
     plt.plot(x_val, y_val, 'o', x_new, y_new)
-    plt.xlim([x_val[0]-0.005, x_val[-1] + 0.005])
+    plt.xlim([x_val[0] - 0.005, x_val[-1] + 0.005])
     plt.grid(True)
     plt.show()
 
@@ -224,3 +243,5 @@ taylor_series(4)
 # coordinate_array()
 
 function_list = np.asarray(function_list)
+print(function_list)
+breakpoint()

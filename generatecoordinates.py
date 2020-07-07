@@ -27,6 +27,7 @@ def generate_second_coordinates(size):
     array = np.asarray(array)
     array = array.astype(float)
     shape_four = array.shape
+
     return shape_four
 
 
@@ -42,6 +43,8 @@ def yield_coordinates(shape_four):
             found = False
             for k in range(shape_four[2]):
                 for L in range(shape_four[3]):
+                    yield i, j, k, L
+                    """
                     if i == k and j == L:
                         value = (i, j, k, L)
                         res = convert(value)
@@ -51,12 +54,12 @@ def yield_coordinates(shape_four):
                     elif found:
                         comparison_list = (i, j, k, L)
                         compare_value = convert(comparison_list)
+                        yield i, j, k, L
                         if compare_value > res:
                             # print(compare_value, res)
                             yield i, j, k, L
                             # manipulate_geometry_second(i, j, k, l)
-
-
+                    """
 # This function generates the array with all of the coordinates for the second derivatives using a generator expression.
 def second_coordinates(fort_file):
     second_coords = []
@@ -66,6 +69,8 @@ def second_coordinates(fort_file):
     second_coords = np.asarray(second_coords)
     return second_coords
 
+
+generate_second_coordinates((3, 0))
 
 second_coordinates("fort_files/fort.15")
 
