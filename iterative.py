@@ -165,7 +165,7 @@ f3 = f_constants[2]
 
 # Check that the signs of the values are correct. I don't anticipate that the signs need to change.
 # TODO: Implement a curve fitting method. DONE!
-c = 0.00944863
+
 energy_list = []
 function_list = []
 
@@ -175,6 +175,7 @@ function_list = []
 
 def summation_of_terms(f1, f2, f3, c2, c3, c4):
     points = []
+    c = 0.00944863
     for x in range(5):
         x = x * c
         y = (referenceE + 0 + (f1 / 2) * (x ** 2) + (f2 / 6) * (x ** 3) + (f3 / 24) * (x ** 4))
