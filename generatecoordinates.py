@@ -198,4 +198,4 @@ def fourth_geometry():
     for value in fourth_array:
         new_fourth.append(value)
 
-    return new_fourth
+    return np.asarray(new_fourth)
