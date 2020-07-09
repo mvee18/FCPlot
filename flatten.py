@@ -41,19 +41,26 @@ def iterate_arrays():
     third_array, third_coords, third_shape = array_matching("fort.30")
     fourth_array, fourth_coords, fourth_shape = array_matching("fort.40")
 
-    with mp.Pool() as pool:
-        for rows in range(second_shape[0]):
-            for cols in range(second_shape[1]):
-                for thr_rows in range(third_shape[0]):
-                    for thr_cols in range(third_shape[1]):
-                        for for_rows in range(fourth_shape[0]):
-                            for for_cols in range(fourth_shape[1]):
-                                print(rows, cols, thr_rows, thr_cols, for_rows, for_cols)
-                                f1, c2 = second_array[rows][cols], second_coords[rows][cols]
-                                f2, c3 = third_array[thr_rows][thr_cols], third_coords[thr_rows][thr_cols]
-                                f3, c4 = fourth_array[for_rows][for_cols], fourth_coords[for_rows][for_cols]
-                                coeffs = pool.map(summation_of_terms, [(f1, f2, f3)])
-                                function_list.append((c2, c3, c4, coeffs))
+    array = []
+    num_of_points = (second_array.size * third_array.size * fourth_array.size)
+    print("Currently generating data for {} points...".format(num_of_points))
+
+    for rows in range(second_shape[0]):
+        for cols in range(second_shape[1]):
+            for thr_rows in range(third_shape[0]):
+                for thr_cols in range(third_shape[1]):
+                    for for_rows in range(fourth_shape[0]):
+                        for for_cols in range(fourth_shape[1]):
+                            f1, c2 = second_array[rows][cols], second_coords[rows][cols]
+                            f2, c3 = third_array[thr_rows][thr_cols], third_coords[thr_rows][thr_cols]
+                            f3, c4 = fourth_array[for_rows][for_cols], fourth_coords[for_rows][for_cols]
+                            array.append([f1, f2, f3, c2, c3, c4])
+
+    print("{} points generated. Proceeding to function creation.".format(len(array)))
+    return np.asarray(array)
+
+#                               coeffs = pool.map(summation_of_terms, [(f1, f2, f3)])
+#                               function_list.append((c2, c3, c4, coeffs))
 
 
 def summation_of_terms(f_constants):
@@ -91,7 +98,9 @@ def poly_fit(x, y):
 
 
 if __name__ == "__main__":
-    iterate_arrays()
+    mp_array = iterate_arrays()
+    print(mp_array)
+    breakpoint()
     function_list = np.asarray(function_list)
     print(function_list)
     print("---- %s seconds ----" % (time.time() - start_time))
