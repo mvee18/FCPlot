@@ -76,14 +76,14 @@ def iterate_array(array1, array2, array3):
     size1 = array1.shape  # (3, 27)
     size2 = array2.shape
     size3 = array3.shape
-    print(size1, size2, size3)
-    print(len(second_coords), len(third_coords), len(fourth_coords))
 
+    print(size1)
     global Reset_List, Reset_List_Third, Reset_List_Fourth, second_iter, third_iter, fourth_iter
     count = 0
-    while count <= 12:
+    while True:
         for rows in range(size1[0]):
             count += 1
+            print("COUNT: " + str(count))
             for cols in range(size1[1]):
                 try:
                     f1 = (array1[rows][cols])
