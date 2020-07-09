@@ -1,0 +1,18 @@
+.\" Manpage for FCPlot.
+.\" Contact emvalenc@go.olemmiss.edu to correct errors or typos.
+.TH man 8 "09 July 2020" "WIP" "fcplot man page"
+.SH NAME
+FCPlot \- Generates an array of all possible fourth-order polynomial fitted functions from the fort files provided.
+.SH SYNOPSIS
+fcplot.pbs
+.SH DESCRIPTION
+FCPlot is an exhaustive program that generates all possible fourth-order polynomial fitted functions from the provided
+files in the fort_files directories.
+.SH OPTIONS
+FCPlot does not take any inputs besides the files in the fort_files directories.
+.SH SEE ALSO
+useradd(8), passwd(5), nuseradd.debian(8)
+.SH BUGS
+No known bugs.
+.SH AUTHOR
+Michael Valencia
