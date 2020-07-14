@@ -3,14 +3,18 @@ import os
 from generatecoordinates import second_coordinates, third_geometry, fourth_geometry
 import multiprocessing as mp
 import time
+import pandas as pd
 
 start_time = time.time()
 np.set_printoptions(precision=10, floatmode="fixed", suppress=True)
 
 function_list = []
+
+
 def generate_array(file):
     path = os.path.join(file)
     return np.asarray(np.genfromtxt(path, skip_header=1))
+
 
 # Put it all together in one beautiful function. DONE!
 def array_matching(filename):
@@ -77,7 +81,8 @@ def summation_of_terms(f_constants):
     #    print(points)
     #    plot_from_tuples(points)
     coeffs = yield_coefficients(points)
-    return coeffs
+    return [c2, c3, c4, coeffs]
+
 
 def yield_coefficients(data):
     x_val = [x[0] for x in data]
@@ -99,8 +104,15 @@ def poly_fit(x, y):
 
 if __name__ == "__main__":
     mp_array = iterate_arrays()
-    print(mp_array)
-    breakpoint()
+    print(mp_array.nbytes)
+    with mp.Pool() as pool:
+        for x in pool.imap(summation_of_terms, mp_array, 1000):
+            function_list.append(x)
+
     function_list = np.asarray(function_list)
     print(function_list)
     print("---- %s seconds ----" % (time.time() - start_time))
+
+    df = pd.DataFrame(data=function_list, columns=['Second Derivative', 'Third Derivative', 'Fourth Derivative',
+                                                   'Function'])
+    df.to_csv('functionlist.csv')
