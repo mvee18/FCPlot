@@ -3,7 +3,7 @@ import os
 from generatecoordinates import second_coordinates, third_geometry, fourth_geometry
 import multiprocessing as mp
 import time
-import pandas as pd
+from interface import function_list_iteration
 
 start_time = time.time()
 np.set_printoptions(precision=10, floatmode="fixed", suppress=True)
@@ -69,6 +69,7 @@ def iterate_arrays():
 
 def summation_of_terms(f_constants):
     f1, f2, f3 = f_constants[0], f_constants[1], f_constants[2]
+    c2, c3, c4 = f_constants[3], f_constants[4], f_constants[5]
     points = []
     c = 0.00944863
     referenceE = -76.369839621528
@@ -104,15 +105,17 @@ def poly_fit(x, y):
 
 if __name__ == "__main__":
     mp_array = iterate_arrays()
-    print(mp_array.nbytes)
+    print("The array occupies %d bytes\n" % mp_array.nbytes)
     with mp.Pool() as pool:
         for x in pool.imap(summation_of_terms, mp_array, 1000):
             function_list.append(x)
 
     function_list = np.asarray(function_list)
     print(function_list)
+    print("The function_list occupies %d bytes\n" % function_list.nbytes)
     print("---- %s seconds ----" % (time.time() - start_time))
+    breakpoint()
 
-    df = pd.DataFrame(data=function_list, columns=['Second Derivative', 'Third Derivative', 'Fourth Derivative',
-                                                   'Function'])
-    df.to_csv('functionlist.csv')
+    function_list_iteration(function_list)
+
+    breakpoint()
