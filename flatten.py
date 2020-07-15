@@ -116,6 +116,7 @@ if __name__ == "__main__":
     print("---- %s seconds ----" % (time.time() - start_time))
     breakpoint()
 
-    function_list_iteration(function_list)
+    sec, thr, fourth = function_list_iteration(function_list)
+    print(sec, thr, fourth)
 
     breakpoint()
