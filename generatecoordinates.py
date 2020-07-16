@@ -1,9 +1,10 @@
 import numpy as np
-
+import os
 
 # This works. Or we could just use the array.size from the main file.
 def read_first_line(fort_file):
-    f = open(fort_file, "r")
+    file = os.path.join(fort_file)
+    f = open(file, "r")
     lines = f.readlines()
     first_line = lines[0].split()
     size_of_line = (int(first_line[0]), int(first_line[1]))
