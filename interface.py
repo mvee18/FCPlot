@@ -80,10 +80,11 @@ def second_matching(coordinate, function):
 
 
 def third_matching(coordinate, function):
+    coordinate = coordinate.tolist()
     if np.all([coordinate[0] == coordinate[1], coordinate[1] == coordinate[2]]):
         p = energy_output(function)
         e1, e2, e3, e4 = p(3 * c), p(c), p(-c), p(-(3 * c))
-        fort30array.append((coordinate, e1, e2, e3, e4))
+        fort30array.append((coordinate, [e1, e2, e3, e4]))
 
     elif np.all([coordinate[0] == coordinate[1]]):
         third_doubles(coordinate, function)
@@ -99,7 +100,7 @@ def third_matching(coordinate, function):
 
         else_third = [p(3 * c), p(2 * c), p(2 * c), p(-(2 * c)), p(2 * c), p(-(2 * c)), p(-(2 * c)), p(-(2 * c)),
                       p(-(3 * c))]
-        fort30array.append((coordinate, else_third))
+        fort30array.append((coordinate, [else_third]))
 
     else:
         raise Exception("Unable to iterate over all coordinates. Check the geometry.")
@@ -108,14 +109,15 @@ def third_matching(coordinate, function):
 def third_doubles(coordinate, function):
     p = energy_output(function)
     e1, e2, e3, e4, e5, e6 = p(3 * c), p(c), p(-c), p(c), p(-c), p(-(3 * c))
-    fort30array.append((coordinate, e1, e2, e3, e4, e5, e6))
+    fort30array.append((coordinate, [e1, e2, e3, e4, e5, e6]))
 
 
 def fourth_matching(coordinate, function):
+    coordinate = coordinate.tolist()
     if np.all([coordinate[0] == coordinate[1], coordinate[1] == coordinate[2], coordinate[2] == coordinate[3]]):
         p = energy_output(function)
         e1, e2, e3, e4 = p(4 * c), p(2 * c), p(-(2 * c)), p(-(4 * c))
-        fort40array.append((coordinate, e1, e2, e3, e4))
+        fort40array.append((coordinate, [e1, e2, e3, e4]))
 
     elif np.all([coordinate[0] == coordinate[1], coordinate[0] == coordinate[2]]):
         fourth_triples(coordinate, function)
@@ -157,7 +159,7 @@ def fourth_matching(coordinate, function):
         p = np.poly1d(function)
         fourth_single = [p(4 * c), p(2 * c), p(2 * c), p(0), p(2 * c), p(0), p(0), p(-(2 * c)), p(2 * c), p(0), p(0),
                          p(-2), p(0), p(-2), p(-2), p(-4)]
-        fort40array.append((coordinate, fourth_single))
+        fort40array.append((coordinate, [fourth_single]))
 
 
 def fourth_doubles(coordinate, function):
@@ -165,16 +167,16 @@ def fourth_doubles(coordinate, function):
     fourth_double = [p(4 * c), p(2 * c), p(0), p(2 * c), p(0), p(-(2 * c)), p(2 * c), p(0), p(-(2 * c)), p(0),
                      p(-(2 * c)),
                      p(-(4 * c))]
-    fort40array.append((coordinate, fourth_double))
+    fort40array.append((coordinate, [fourth_double]))
 
 
 def fourth_triples(coordinate, function):
     p = np.poly1d(function)
     fourth_triple = [p(4 * c), p(2 * c), p(0), p(-(2 * c)), p(2 * c), p(0), p(-(2 * c)), p(-(4 * c))]
-    fort40array.append((coordinate, fourth_triple))
+    fort40array.append((coordinate, [fourth_triple]))
 
 
 def fourth_pair(coordinate, function):
     p = np.poly1d(function)
     fourth_pairs = [p(4 * c), p(-(4 * c)), p(0), p(0), p(2 * c), p(2 * c), p(-(2 * c)), p(-(2 * c)), p(0)]
-    fort40array.append((coordinate, fourth_pairs))
+    fort40array.append((coordinate, [fourth_pairs]))
