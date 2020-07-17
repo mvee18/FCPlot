@@ -60,8 +60,8 @@ def iterate_arrays():
                             f3, c4 = fourth_array[for_rows][for_cols], fourth_coords[for_rows][for_cols]
                             array.append([f1, f2, f3, c2, c3, c4])
 
-#           break
-#       break
+            break
+        break
 
     print("{} points generated. Proceeding to function creation.".format(len(array)))
     return np.asarray(array)
@@ -109,7 +109,7 @@ def poly_fit(x, y):
 if __name__ == "__main__":
     mp_array = iterate_arrays()
     print("The array occupies %d bytes\n" % mp_array.nbytes)
-    breakpoint()
+#   breakpoint()
 
     with mp.Pool() as pool:
         for x in pool.imap(summation_of_terms, mp_array, 1000):
@@ -119,7 +119,7 @@ if __name__ == "__main__":
     print(function_list)
     print("The function_list occupies %d bytes\n" % function_list.nbytes)
     print("---- %s seconds ----" % (time.time() - start_time))
-    breakpoint()
+#   breakpoint()
 
     sec, thr, fourth = function_list_iteration(function_list)
     print(sec, thr, fourth)
