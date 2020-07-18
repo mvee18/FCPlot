@@ -60,6 +60,7 @@ def function_list_iteration(array):
 
     return np.asarray(fort15array), np.asarray(fort30array), np.asarray(fort40array)
 
+
 def energy_output(function):
     return np.poly1d(function)
 
@@ -75,28 +76,27 @@ def second_matching(coordinate, function):
     if a1 == a2 and c1 == c2:
         p = energy_output(function)
         e1, e2 = p(2 * c), p(-(2 * c))
-        fort15array.append((parse_coordinates(coordinate, 1), e1))
-        fort15array.append((parse_coordinates(coordinate, -1), e2))
-        breakpoint()
+        fort15array.append((parse_coordinates(coordinate, [(1,)]), e1))
+        fort15array.append((parse_coordinates(coordinate, [(-1,)]), e2))
 
     elif len(coordinate) == 4:
         p = energy_output(function)
-        second_list = [(p((2 * c)), 1), (p(c), 1), p(-c), p(-(2 * c))]
-        fort15array.append((coordinate, x))
+        second_list = [(p(2 * c)), p(c), p(-c), p(-(2 * c))]
+        # The below input represents (+x,+y),(+x,-y),(-x,+y),(-x,-y) displacements.
+        coordinate_list = parse_coordinates(coordinate, [(1, 1), (1, -1), (-1, 1), (-1, -1)])
+        [fort15array.append((x, second_list[count])) for count, x in enumerate(coordinate_list)]
 
     else:
         raise Exception("Incorrect length for the second coordinates. Check the input.")
 
-    print(fort15array)
-    breakpoint()
 
 def third_matching(coordinate, function):
     coordinate = coordinate.tolist()
     if np.all([coordinate[0] == coordinate[1], coordinate[1] == coordinate[2]]):
-        coordinate_list = parse_coordinates(coordinate)
         p = energy_output(function)
-        e1, e2, e3, e4 = p(3 * c), p(c), p(-c), p(-(3 * c))
-        fort30array.append((coordinate_list, [e1, e2, e3, e4]))
+        third_list = [p(3 * c), p(c), p(-c), p(-(3 * c))]
+        coordinate_list = parse_coordinates(coordinate, [(+1,), (+1,), (-1,), (-1,)])
+        [fort30array.append((x, third_list[count])) for count, x in enumerate(coordinate_list)]
 
     elif np.all([coordinate[0] == coordinate[1]]):
         third_doubles(coordinate, function)
@@ -108,31 +108,32 @@ def third_matching(coordinate, function):
         third_doubles(coordinate, function)
 
     elif np.all([coordinate[0] is not coordinate[1], coordinate[1] is not coordinate[2]]):
-        coordinate_list = parse_coordinates(coordinate)
         p = energy_output(function)
 
         else_third = [p(3 * c), p(2 * c), p(2 * c), p(-(2 * c)), p(2 * c), p(-(2 * c)), p(-(2 * c)), p(-(2 * c)),
                       p(-(3 * c))]
-        fort30array.append((coordinate_list, [else_third]))
+
+        do_parsing_and_append(coordinate, else_third, 3,
+                              [(1, 1, 1), (1, -1, 1), (-1, 1, 1), (-1, -1, 1), (1, 1, -1), (1, -1, -1), (-1, 1, -1),
+                               (-1, -1, -1)])
 
     else:
         raise Exception("Unable to iterate over all coordinates. Check the geometry.")
 
 
 def third_doubles(coordinate, function):
-    coordinate_list = parse_coordinates(coordinate)
     p = energy_output(function)
-    e1, e2, e3, e4, e5, e6 = p(3 * c), p(c), p(-c), p(c), p(-c), p(-(3 * c))
-    fort30array.append((coordinate_list, [e1, e2, e3, e4, e5, e6]))
+    third_list = [p(3 * c), p(c), p(-c), p(c), p(-c), p(-(3 * c))]
+    coordinate_list = parse_coordinates(coordinate, [(1, 1), (0, 1), (-1, 1), (1, -1), (0, -1), (-1, -1)])
+    [fort30array.append((x, third_list[count])) for count, x in enumerate(coordinate_list)]
 
 
 def fourth_matching(coordinate, function):
     coordinate = coordinate.tolist()
     if np.all([coordinate[0] == coordinate[1], coordinate[1] == coordinate[2], coordinate[2] == coordinate[3]]):
-        coordinate_list = parse_coordinates(coordinate)
-        p = energy_output(function)
-        e1, e2, e3, e4 = p(4 * c), p(2 * c), p(-(2 * c)), p(-(4 * c))
-        fort40array.append((coordinate_list, [e1, e2, e3, e4]))
+        p = np.poly1d(function)
+        fourth_list = [p(4 * c), p(2 * c), p(0), p(-(2 * c)), p(-(4 * c))]
+        do_parsing_and_append(coordinate, fourth_list, 4, [(1,), (1,), (0,), (-1,), (-1,)])
 
     elif np.all([coordinate[0] == coordinate[1], coordinate[0] == coordinate[2]]):
         fourth_triples(coordinate, function)
@@ -171,31 +172,48 @@ def fourth_matching(coordinate, function):
         fourth_doubles(coordinate, function)
 
     else:
-        coordinate_list = parse_coordinates(coordinate)
         p = np.poly1d(function)
         fourth_single = [p(4 * c), p(2 * c), p(2 * c), p(0), p(2 * c), p(0), p(0), p(-(2 * c)), p(2 * c), p(0), p(0),
                          p(-2), p(0), p(-2), p(-2), p(-4)]
-        fort40array.append((coordinate_list, [fourth_single]))
+        do_parsing_and_append(coordinate, fourth_single, 4,
+                              [(1, 1, 1, 1), (-1, 1, 1, 1), (1, -1, 1, 1), (-1, -1, 1, 1), (1, 1, -1, 1),
+                               (-1, 1, -1, 1), (1, -1, -1, 1), (-1, -1, -1, 1), (1, 1, 1, -1), (-1, 1, 1, -1),
+                               (1, -1, 1, -1), (-1, -1, 1, -1), (1, 1, -1, -1), (-1, 1, -1, -1), (1, -1, -1, -1),
+                               (-1, -1, -1, -1)])
 
 
 def fourth_doubles(coordinate, function):
-    coordinate_list = parse_coordinates(coordinate)
     p = np.poly1d(function)
     fourth_double = [p(4 * c), p(2 * c), p(0), p(2 * c), p(0), p(-(2 * c)), p(2 * c), p(0), p(-(2 * c)), p(0),
-                     p(-(2 * c)),
-                     p(-(4 * c))]
-    fort40array.append((coordinate_list, [fourth_double]))
+                     p(-(2 * c)), p(-(4 * c))]
+
+    do_parsing_and_append(coordinate, fourth_double, 4,
+                          [(1, 1, 1), (0, 1, 1), (-1, 1, 1), (1, -1, 1), (0, -1, 1), (-1, -1, 1), (1, 1, -1),
+                           (0, 1, -1), (-1, 1, -1), (1, -1, -1), (0, -1, -1), (-1, -1, -1)])
 
 
 def fourth_triples(coordinate, function):
-    coordinate_list = parse_coordinates(coordinate)
     p = np.poly1d(function)
     fourth_triple = [p(4 * c), p(2 * c), p(0), p(-(2 * c)), p(2 * c), p(0), p(-(2 * c)), p(-(4 * c))]
-    fort40array.append((coordinate_list, [fourth_triple]))
+    do_parsing_and_append(coordinate, fourth_triple, 4,
+                          [(1, 1), (1, 1), (-1, 1), (-1, 1), (1, -1), (1, -1), (-1, -1), (-1, -1)])
 
 
 def fourth_pair(coordinate, function):
-    coordinate_list = parse_coordinates(coordinate)
     p = np.poly1d(function)
     fourth_pairs = [p(4 * c), p(-(4 * c)), p(0), p(0), p(2 * c), p(2 * c), p(-(2 * c)), p(-(2 * c)), p(0)]
-    fort40array.append((coordinate_list, [fourth_pairs]))
+    do_parsing_and_append(coordinate, fourth_pairs, 4,
+                          [(1, 1), (-1, -1), (-1, 1), (1, -1), (1, 0), (0, 1), (-1, 0), (0, -1), (0, 0)])
+
+
+def do_parsing_and_append(coordinate, energies, derivative, signs):
+    coordinate_list = parse_coordinates(coordinate, signs)
+
+    if derivative == 2:
+        [fort15array.append((x, energies[count])) for count, x in enumerate(coordinate_list)]
+
+    elif derivative == 3:
+        [fort30array.append((x, energies[count])) for count, x in enumerate(coordinate_list)]
+
+    elif derivative == 4:
+        [fort40array.append((x, energies[count])) for count, x in enumerate(coordinate_list)]
