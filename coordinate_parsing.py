@@ -6,6 +6,7 @@ import copy
 
 num_atoms = int(read_first_line("fort_files/fort.15")[0])
 
+
 def parse_coordinates(coordinate, sign):  # 1 means positive, -1 means negative.
     # We can use a numpy array with zero to represent the string of coordinates without any displacement.
     xyz = np.zeros((num_atoms, 3))
@@ -36,9 +37,12 @@ test4 = [[0, 0], [0, 0], [0, 0]]
 test5 = [[2, 0], [1, 0], [0, 0]]
 test6 = [[2, 0], [2, 0], [0, 0]]
 
+
 # Input like [1,1], [1,-1], [-1,1], [-1,-1]
 
 def change_signs(xyz, sign):
+    # Note the use of deepcopy since all python objects are really pointers.
+    # The only way to reset it is to use an unlinked copy (i.e., a new memory instance).
     index_list = []
     return_coordinates = []
     xyz_working = copy.deepcopy(xyz)
@@ -52,8 +56,10 @@ def change_signs(xyz, sign):
             xyz_working[index_list[count]] = value * xyz_working[index_list[count]]
 
         return_coordinates.append(xyz_working)
-        xyz_working = xyz
+        xyz_working = copy.deepcopy(xyz)
 
     return return_coordinates
 
+
+test_sign4 = [(1,), (1/3,), (-1/3,), (-1,)]
 
