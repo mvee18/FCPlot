@@ -26,3 +26,5 @@ flatten.py
 function_list.txt
 
 functionlist.csv
+
+*.pyc

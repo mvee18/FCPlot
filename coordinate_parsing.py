@@ -6,6 +6,20 @@ import copy
 
 num_atoms = int(read_first_line("fort_files/fort.15")[0])
 
+def sign_change(array, sign):
+    return_coordinates = []
+    a = np.argsort(-array, axis=None)
+    xyz = copy.deepcopy(array)
+
+    for s in sign:
+        for c, value in enumerate(s):
+            xyz[a[c]] = xyz[a[c]] * value
+
+        return_coordinates.append(xyz)
+        xyz = copy.deepcopy(array)
+
+    return np.asarray(return_coordinates)
+
 
 def parse_coordinates(coordinate, sign):  # 1 means positive, -1 means negative.
     # We can use a numpy array with zero to represent the string of coordinates without any displacement.
@@ -24,42 +38,27 @@ def parse_coordinates(coordinate, sign):  # 1 means positive, -1 means negative.
             xyz[entry[0]][entry[1]] += 1
 
     xyz = xyz.flatten()
-    coordinates_list = change_signs(xyz, sign)
+    coordinates_list = sign_change(xyz, sign)
 
     return coordinates_list
 
 
-test1 = [0, 0, 0, 0]  # Outputs [2, 0, 0, 0, 0, 0, 0, 0, 0]
-test2 = [1, 1, 1, 1]  # Outputs [0, 0, 0, 0, 2, 0, 0, 0, 0]
-test3 = [2, 1, 2, 0]
+# Test Data
+# test1 = [0, 0, 0, 0]  # Outputs [2, 0, 0, 0, 0, 0, 0, 0, 0]
+# test2 = [1, 1, 1, 1]  # Outputs [0, 0, 0, 0, 2, 0, 0, 0, 0]
+# test3 = [2, 1, 2, 0]
+# test3_signs = [(1, 1), (1, -1), (-1, 1), (-1, -1)]
 
-test4 = [[0, 0], [0, 0], [0, 0]]
-test5 = [[2, 0], [1, 0], [0, 0]]
-test6 = [[2, 0], [2, 0], [0, 0]]
+# test4 = [[0, 0], [0, 0], [0, 0]]
+# test4_signs = [(1,), (1/2,), (0,), (-1/2,), (-1,)]
+# test5 = [[2, 0], [1, 0], [0, 0]]
 
+# test6 = [[2, 0], [2, 0], [0, 0]]
+# triple_double_signs = [(1, 1), (0, 1), (-1, 1), (1, -1), (0, -1), (-1, -1)]
 
-# Input like [1,1], [1,-1], [-1,1], [-1,-1]
+# test_sign4 = [(1,), (1 / 3,), (-1 / 3,), (-1,)]
 
-def change_signs(xyz, sign):
-    # Note the use of deepcopy since all python objects are really pointers.
-    # The only way to reset it is to use an unlinked copy (i.e., a new memory instance).
-    index_list = []
-    return_coordinates = []
-    xyz_working = copy.deepcopy(xyz)
+# fourth1 = [[2, 0], [2, 0], [2, 0], [0, 0]]
+# fourth_triple_signs = [(1, 1), (1/3, 1), (-1/3, 1), (-1, 1), (1, -1), (1/3, -1), (-1/3, -1), (-1, -1)]
 
-    for index, number in enumerate(xyz):
-        if number != 0:
-            index_list.append(index)
-
-    for sign_chart in sign:
-        for count, value in enumerate(sign_chart):
-            xyz_working[index_list[count]] = value * xyz_working[index_list[count]]
-
-        return_coordinates.append(xyz_working)
-        xyz_working = copy.deepcopy(xyz)
-
-    return return_coordinates
-
-
-test_sign4 = [(1,), (1/3,), (-1/3,), (-1,)]
-
+print(parse_coordinates(test6, triple_double_signs))
