@@ -52,7 +52,7 @@ second_coords, third_coords, fourth_coords = second_coordinates(
 second_iter, third_iter, fourth_iter = iter(second_coords), iter(third_coords), iter(fourth_coords)
 
 # Taylor Series Calculations. Find a way to find each point...?
-# TODO: Integrate this into the plotting functions.
+# DONE: Integrate this into the plotting functions.
 def taylor_series(level):
     if level == 2:
         data = generate_data(2)
@@ -154,7 +154,7 @@ def iterate_array(array1, array2, array3):
 referenceE = -76.369839621528
 
 # This list comprehension converts the f_constants given to their absolute values.
-# TODO: Decide whether or not this is beneficial / harmful. Seems to make little difference for the z3 displacements.
+# DONE: Decide whether or not this is beneficial / harmful. Seems to make little difference for the z3 displacements.
 """
 f_constants = [abs(x) for x in f_constants]
 
@@ -164,7 +164,7 @@ f3 = f_constants[2]
 """
 
 # Check that the signs of the values are correct. I don't anticipate that the signs need to change.
-# TODO: Implement a curve fitting method. DONE!
+# DONE: Implement a curve fitting method. DONE!
 
 energy_list = []
 function_list = []

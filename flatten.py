@@ -4,6 +4,7 @@ from generatecoordinates import second_coordinates, third_geometry, fourth_geome
 import multiprocessing as mp
 import time
 from interface import function_list_iteration
+import gc
 
 start_time = time.time()
 np.set_printoptions(precision=10, floatmode="fixed", suppress=True)
@@ -59,6 +60,8 @@ def iterate_arrays():
                             f2, c3 = third_array[thr_rows][thr_cols], third_coords[thr_rows][thr_cols]
                             f3, c4 = fourth_array[for_rows][for_cols], fourth_coords[for_rows][for_cols]
                             array.append([f1, f2, f3, c2, c3, c4])
+            break
+        break
 
     print("{} points generated. Proceeding to function creation.".format(len(array)))
     return np.asarray(array)
@@ -106,11 +109,13 @@ def poly_fit(x, y):
 if __name__ == "__main__":
     mp_array = iterate_arrays()
     print("The array occupies %d bytes\n" % mp_array.nbytes)
-#   breakpoint()
 
     with mp.Pool() as pool:
         for x in pool.imap(summation_of_terms, mp_array, 1000):
             function_list.append(x)
+
+    # Manual memory freeing; these no longer need to be in memory.
+    del mp_array, pool, x
 
     function_list = np.asarray(function_list)
     print(function_list)
@@ -119,6 +124,10 @@ if __name__ == "__main__":
 #   breakpoint()
 
     sec, thr, fourth = function_list_iteration(function_list)
+
+    del function_list
+
     print(sec, thr, fourth)
 
     breakpoint()
+    print("---- %s seconds ----" % (time.time() - start_time))

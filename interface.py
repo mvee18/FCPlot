@@ -124,7 +124,7 @@ def third_matching(coordinate, function):
 def third_doubles(coordinate, function):
     p = energy_output(function)
     third_list = [p(3 * c), p(c), p(-c), p(c), p(-c), p(-(3 * c))]
-    coordinate_list = parse_coordinates(coordinate, [(1, 1/2), (0, 1/2), (-1, 1/2), (1, -1/2), (0, -1/2), (-1, -1/2)])
+    coordinate_list = parse_coordinates(coordinate, [(1, 1), (0, 1), (-1, 1), (1, -1), (0, -1), (-1, -1)])
     [fort30array.append((x, third_list[count])) for count, x in enumerate(coordinate_list)]
 
 
@@ -188,15 +188,15 @@ def fourth_doubles(coordinate, function):
                      p(-(2 * c)), p(-(4 * c))]
 
     do_parsing_and_append(coordinate, fourth_double, 4,
-                          [(1, 1/2, 1/2), (0, 1/2, 1/2), (-1, 1/2, 1/2), (1, -1/2, 1/2), (0, -1/2, 1/2), (-1, -1/2, 1/2), (1, 1/2, -1/2),
-                           (0, 1/2, -1/2), (-1, 1/2, -1/2), (1, -1/2, -1/2), (0, -1/2, -1/2), (-1, -1/2, -1/2)])
+                          [(1, 1, 1), (0, 1, 1), (-1, 1, 1), (1, -1, 1), (0, -1, 1), (-1, -1, 1), (1, 1, -1),
+                           (0, 1, -1), (-1, 1, -1), (1, -1, -1), (0, -1, -1), (-1, -1, -1)])
 
-
+# TODO: Make the multiplication map to the larger value.
 def fourth_triples(coordinate, function):
     p = np.poly1d(function)
     fourth_triple = [p(4 * c), p(2 * c), p(0), p(-(2 * c)), p(2 * c), p(0), p(-(2 * c)), p(-(4 * c))]
     do_parsing_and_append(coordinate, fourth_triple, 4,
-                          [(1, 1/3), (1/3, 1/3), (-1/3, 1/3), (-1, 1/3), (1, -1/3), (1, -1), (-1, -1), (-1, -1/3)])
+                          [(1, 1), (1/3, 1), (-1/3, 1), (-1, 1), (1, -1), (1/3, -1), (-1/3, -1), (-1, -1)])
 
 
 def fourth_pair(coordinate, function):
