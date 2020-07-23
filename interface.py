@@ -42,21 +42,79 @@ fort40array = []
 
 c = 0.00944863
 
-
+"""
 def function_list_iteration(array):
     global fort15array, fort30array, fort40array
+    fort15size = read_first_line("fort_files/fort.15")[1] * 3
+    fort30size = read_first_line("fort_files/fort.30")[1] * 3
+    fort40size = read_first_line("fort_files/fort.40")[1] * 3
+
+    second_counter = 0
+    third_counter = 0
+    fourth_counter = 0
+
     for entry in range(array.shape[0]):
         for coordinates in range(array.shape[1]):
             function = array[entry][3]
 
             if coordinates == 0:
-                second_matching(array[entry][0], function)
+                if second_counter <= fort15size:
+                    print(array[entry][0])
+                    second_matching(array[entry][0], function)
+                    second_counter += 1
+                    print("2nd Count: %d", second_counter)
+                else:
+                    break
+                breakpoint()
 
             elif coordinates == 1:
-                third_matching(array[entry][1], function)
+                if third_counter <= fort30size:
+                    print(array[entry][1])
+                    third_matching(array[entry][1], function)
+                    third_counter += 1
+                    print("3rd Count: %d", third_counter)
+                else:
+                    break
+                breakpoint()
 
             elif coordinates == 2:
-                fourth_matching(array[entry][2], function)
+                if fourth_counter <= fort40size:
+                    print(array[entry][2])
+                    fourth_matching(array[entry][2], function)
+                    fourth_counter += 1
+                    print("4th Count: %d", fourth_counter)
+                else:
+                    break
+                breakpoint()
+
+    return np.asarray(fort15array), np.asarray(fort30array), np.asarray(fort40array)
+"""
+
+def function_list_iteration(array):
+    global fort15array, fort30array, fort40array
+    fort15size = read_first_line("fort_files/fort.15")[1]
+    fort30size = read_first_line("fort_files/fort.30")[1]
+    fort40size = read_first_line("fort_files/fort.40")[1]
+
+    # The array is transposed here to make the iteration MUCH simpler. It allows for only unique terms to be selected
+    # by using the size of the next derivative's array.
+
+    transposed = np.transpose(array)
+
+    # Second Derivatives:
+    for x in range(0, len(transposed[0]), fort30size * fort40size):
+        second_matching(transposed[0][x], transposed[3][x])
+#       breakpoint()
+
+    # Third derivatives:
+    for y in range(0, len(transposed[1]), fort40size):
+        third_matching(transposed[1][y], transposed[3][y])
+#       breakpoint()
+
+    # Fourth derivatives.
+    for z in range(0, fort40size):
+        fourth_matching(transposed[2][z], transposed[3][z])
+#       breakpoint()
 
     return np.asarray(fort15array), np.asarray(fort30array), np.asarray(fort40array)
 
