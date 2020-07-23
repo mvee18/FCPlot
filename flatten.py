@@ -4,13 +4,11 @@ from generatecoordinates import second_coordinates, third_geometry, fourth_geome
 import multiprocessing as mp
 import time
 from interface import function_list_iteration
-import gc
 
 start_time = time.time()
 np.set_printoptions(precision=10, floatmode="fixed", suppress=True)
 
 function_list = []
-
 
 def generate_array(file):
     path = os.path.join(file)
@@ -113,6 +111,13 @@ if __name__ == "__main__":
     with mp.Pool() as pool:
         for x in pool.imap(summation_of_terms, mp_array, 1000):
             function_list.append(x)
+
+# The below code block needs to be uncommented to work on the supercomputer. The above should be used when running
+    # locally, but commented if not.
+
+#   for row in mp_array:
+#       x = summation_of_terms(row)
+#       function_list.append(x)
 
     # Manual memory freeing; these no longer need to be in memory.
     del mp_array, pool, x
