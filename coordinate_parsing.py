@@ -42,7 +42,6 @@ def parse_coordinates(coordinate, sign):  # 1 means positive, -1 means negative.
 
     return coordinates_list
 
-
 # Test Data
 # test1 = [0, 0, 0, 0]  # Outputs [2, 0, 0, 0, 0, 0, 0, 0, 0]
 # test2 = [1, 1, 1, 1]  # Outputs [0, 0, 0, 0, 2, 0, 0, 0, 0]
@@ -60,5 +59,3 @@ def parse_coordinates(coordinate, sign):  # 1 means positive, -1 means negative.
 
 # fourth1 = [[2, 0], [2, 0], [2, 0], [0, 0]]
 # fourth_triple_signs = [(1, 1), (1/3, 1), (-1/3, 1), (-1, 1), (1, -1), (1/3, -1), (-1/3, -1), (-1, -1)]
-
-print(parse_coordinates(test6, triple_double_signs))

@@ -84,7 +84,7 @@ def second_matching(coordinate, function):
         second_list = [(p(2 * c)), p(c), p(-c), p(-(2 * c))]
         # The below input represents (+x,+y),(+x,-y),(-x,+y),(-x,-y) displacements.
         coordinate_list = parse_coordinates(coordinate, [(1, 1), (1, -1), (-1, 1), (-1, -1)])
-        [fort15array.append((x, second_list[count])) for count, x in enumerate(coordinate_list)]
+        [fort15array.append(x) for x in zip(coordinate_list, second_list)]
 
     else:
         raise Exception("Incorrect length for the second coordinates. Check the input.")
@@ -96,7 +96,7 @@ def third_matching(coordinate, function):
         p = energy_output(function)
         third_list = [p(3 * c), p(c), p(-c), p(-(3 * c))]
         coordinate_list = parse_coordinates(coordinate, [(+1,), (+1/3,), (-1/3,), (-1,)])
-        [fort30array.append((x, third_list[count])) for count, x in enumerate(coordinate_list)]
+        [fort30array.append(x) for x in zip(coordinate_list, third_list)]
 
     elif np.all([coordinate[0] == coordinate[1]]):
         third_doubles(coordinate, function)
@@ -125,7 +125,9 @@ def third_doubles(coordinate, function):
     p = energy_output(function)
     third_list = [p(3 * c), p(c), p(-c), p(c), p(-c), p(-(3 * c))]
     coordinate_list = parse_coordinates(coordinate, [(1, 1), (0, 1), (-1, 1), (1, -1), (0, -1), (-1, -1)])
-    [fort30array.append((x, third_list[count])) for count, x in enumerate(coordinate_list)]
+#   [fort30array.append((x, third_list[count])) for count, x in enumerate(coordinate_list)]
+#   DONE: change the list comprehension to a zip.
+    [fort30array.append(x) for x in zip(coordinate_list, third_list)]
 
 
 def fourth_matching(coordinate, function):
@@ -210,10 +212,10 @@ def do_parsing_and_append(coordinate, energies, derivative, signs):
     coordinate_list = parse_coordinates(coordinate, signs)
 
     if derivative == 2:
-        [fort15array.append((x, energies[count])) for count, x in enumerate(coordinate_list)]
+        [fort15array.append(x) for x in zip(coordinate_list, energies)]
 
     elif derivative == 3:
-        [fort30array.append((x, energies[count])) for count, x in enumerate(coordinate_list)]
+        [fort30array.append(x) for x in zip(coordinate_list, energies)]
 
     elif derivative == 4:
-        [fort40array.append((x, energies[count])) for count, x in enumerate(coordinate_list)]
+        [fort40array.append(x) for x in zip(coordinate_list, energies)]
