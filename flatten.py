@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 import numpy as np
 import os
 from generatecoordinates import second_coordinates, third_geometry, fourth_geometry
@@ -108,19 +110,20 @@ if __name__ == "__main__":
     mp_array = iterate_arrays()
     print("The array occupies %d bytes\n" % mp_array.nbytes)
 
-    with mp.Pool() as pool:
-        for x in pool.imap(summation_of_terms, mp_array, 1000):
-            function_list.append(x)
+#   with mp.Pool() as pool:
+#       for x in pool.imap(summation_of_terms, mp_array, 1000):
+#           function_list.append(x)
 
 # The below code block needs to be uncommented to work on the supercomputer. The above should be used when running
     # locally, but commented if not.
 
-#   for row in mp_array:
-#       x = summation_of_terms(row)
-#       function_list.append(x)
+    for row in mp_array:
+        x = summation_of_terms(row)
+        function_list.append(x)
 
     # Manual memory freeing; these no longer need to be in memory.
-    del mp_array, pool, x
+    del mp_array
+#   del pool, x
 
     function_list = np.asarray(function_list)
     print(function_list)
