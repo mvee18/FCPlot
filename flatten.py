@@ -58,8 +58,8 @@ def iterate_arrays():
                             f2, c3 = third_array[thr_rows][thr_cols], third_coords[thr_rows][thr_cols]
                             f3, c4 = fourth_array[for_rows][for_cols], fourth_coords[for_rows][for_cols]
                             array.append([f1, f2, f3, c2, c3, c4])
-            break
-        break
+#           break
+#       break
 
     print("{} points generated. Proceeding to function creation.".format(len(array)))
     return np.asarray(array)
@@ -134,5 +134,5 @@ if __name__ == "__main__":
 
     print(sec, thr, fourth)
 
-    breakpoint()
     print("---- %s seconds ----" % (time.time() - start_time))
+    breakpoint()
