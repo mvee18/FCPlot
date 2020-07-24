@@ -1,7 +1,6 @@
 
 __pycache__/generatecoordinates.cpython-37.pyc
 
-Coordinate Count as x coord.png
 /itertesting.py
 
 .idea/FCPlot.iml
@@ -25,3 +24,7 @@ Coordinate Count as x coord.png
 flatten.py
 
 function_list.txt
+
+functionlist.csv
+
+*.pyc
