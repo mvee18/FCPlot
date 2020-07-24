@@ -1,4 +1,4 @@
-#FCPlot - Force Constant Plot
+# FCPlot - Force Constant Plot
 
 <b> Welcome to FC Plot! </b>
 
