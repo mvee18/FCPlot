@@ -1,0 +1,11 @@
+#!/bin/bash
+#PBS -N fcplot
+#PBS -j oe
+#PBS -l ncpus=2
+#PBS -l mem=64gb
+
+module load python
+
+cd ${PBS_O_WORKDIR}
+
+time ./flatten.py
