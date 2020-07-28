@@ -6,6 +6,7 @@ from generatecoordinates import second_coordinates, third_geometry, fourth_geome
 import multiprocessing as mp
 import time
 from interface import function_list_iteration
+import pandas as pd
 
 start_time = time.time()
 np.set_printoptions(precision=10, floatmode="fixed", suppress=True)
@@ -135,7 +136,18 @@ if __name__ == "__main__":
 
     del function_list
 
-    print(sec, thr, fourth)
+    print(sec)
+    print("\n")
+    print(thr)
+    print("\n")
+    print(fourth)
+
+    secondDF = pd.DataFrame(data=sec)
+    thirdDF = pd.DataFrame(data=thr)
+    fourthDF = pd.DataFrame(data=fourth)
+
+    secondDF.to_csv('second.out')
+    thirdDF.to_csv('third.out')
+    fourthDF.to_csv('fourth.out')
 
     print("---- %s seconds ----" % (time.time() - start_time))
-    breakpoint()
