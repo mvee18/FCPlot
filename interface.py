@@ -108,7 +108,7 @@ def function_list_iteration(array):
 #       breakpoint()
 
     # Third derivatives:
-    for y in range(0, len(transposed[1]), fort40size):
+    for y in range(0, fort30size * fort40size, fort40size):
         third_matching(transposed[1][y], transposed[3][y])
 #       breakpoint()
 

@@ -90,8 +90,8 @@ def summation_of_terms(f_constants):
 
 
 def yield_coefficients(data):
-    x_val = [x[0] for x in data]
-    y_val = [x[1] for x in data]
+    x_val = [val[0] for val in data]
+    y_val = [val[1] for val in data]
 
     x_new, y_new, coeffs = poly_fit(x_val, y_val)
     return coeffs
