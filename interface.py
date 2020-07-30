@@ -100,6 +100,7 @@ def function_list_iteration(array):
     # by using the size of the next derivative's array.
 
     transposed = np.transpose(array)
+#   breakpoint()
 
     # Second Derivatives:
     for x in range(0, len(transposed[0]), fort30size * fort40size):
@@ -107,7 +108,7 @@ def function_list_iteration(array):
 #       breakpoint()
 
     # Third derivatives:
-    for y in range(0, len(transposed[1]), fort40size):
+    for y in range(0, fort30size * fort40size, fort40size):
         third_matching(transposed[1][y], transposed[3][y])
 #       breakpoint()
 
@@ -124,17 +125,18 @@ def energy_output(function):
 
 
 def second_matching(coordinate, function):
-    a1 = coordinate[0]
-    c1 = coordinate[1]
-    a2 = coordinate[2]
-    c2 = coordinate[3]
+    c1 = coordinate[0]
+    a1 = coordinate[1]
+    c2 = coordinate[2]
+    a2 = coordinate[3]
 
     # This will convert the coordinate from [0,0,0,0] --> [1, 0, 0, 0, 0, 0, 0, 0, 0]
 
     if a1 == a2 and c1 == c2:
         p = energy_output(function)
-        e1, e2 = p(2 * c), p(-(2 * c))
+        e1, ref, e2 = p(2 * c), p(0), p(-(2 * c))
         fort15array.append((parse_coordinates(coordinate, [(1,)]), e1))
+        fort15array.append((parse_coordinates(coordinate, [(0,)]), ref))
         fort15array.append((parse_coordinates(coordinate, [(-1,)]), e2))
 
     elif len(coordinate) == 4:

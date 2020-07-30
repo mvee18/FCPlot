@@ -30,9 +30,10 @@ def parse_coordinates(coordinate, sign):  # 1 means positive, -1 means negative.
         coordinate = np.reshape(coordinate, (2, 2))
 
         for entry in coordinate:
-            xyz[entry[1]][entry[0]] += 1
+            xyz[entry[0]][entry[1]] += 1
 
     # This is necessary since the second derivatives are backwards... (i.e., a1, c1, a2, c2 instead of c1, a1, c2, a2).
+    # Actually, they're not. So who's right here...?
     else:
         for entry in coordinate:
             xyz[entry[0]][entry[1]] += 1
