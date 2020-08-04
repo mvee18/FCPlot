@@ -7,11 +7,13 @@ import multiprocessing as mp
 import time
 from interface import function_list_iteration
 import pandas as pd
+import getopt, sys
 
 start_time = time.time()
 np.set_printoptions(precision=10, floatmode="fixed", suppress=True)
 
 function_list = []
+
 
 def generate_array(file):
     path = os.path.join(file)
@@ -61,11 +63,12 @@ def iterate_arrays():
                             f2, c3 = third_array[thr_rows][thr_cols], third_coords[thr_rows][thr_cols]
                             f3, c4 = fourth_array[for_rows][for_cols], fourth_coords[for_rows][for_cols]
                             array.append([f1, f2, f3, c2, c3, c4])
-#           break
-#       break
+    #           break
+    #       break
 
     print("{} points generated. Proceeding to function creation.".format(len(array)))
     return np.asarray(array)
+
 
 #                               coeffs = pool.map(summation_of_terms, [(f1, f2, f3)])
 #                               function_list.append((c2, c3, c4, coeffs))
@@ -107,30 +110,51 @@ def poly_fit(x, y):
     return x_new, y_new, z
 
 
+def command_line(argv):
+    try:
+        opts, args = getopt.getopt(argv, "t:", ["type="])
+    except getopt.GetoptError:
+        print('fcplot.py -t local')
+        sys.exit(2)
+
+    for opt, arg in opts:
+        if opt in "-t":
+            if arg == "local":
+                return True
+
+            else:
+                return False
+
+
 if __name__ == "__main__":
+    # -t local or supercomputer by default
+    local_bool = command_line(sys.argv[1:])
+
     mp_array = iterate_arrays()
     print("The array occupies %d bytes\n" % mp_array.nbytes)
 
-#   with mp.Pool() as pool:
-#       for x in pool.imap(summation_of_terms, mp_array, 1000):
-#           function_list.append(x)
+    if local_bool:  # if True from command_line().
+        with mp.Pool() as pool:
+            for x in pool.imap(summation_of_terms, mp_array, 1000):
+                function_list.append(x)
 
-# The below code block needs to be uncommented to work on the supercomputer. The above should be used when running
-    # locally, but commented if not.
+        del mp_array
+        del pool, x
 
-    for row in mp_array:
-        x = summation_of_terms(row)
-        function_list.append(x)
+    else:
+        for row in mp_array:
+            x = summation_of_terms(row)
+            function_list.append(x)
+
+        del mp_array
 
     # Manual memory freeing; these no longer need to be in memory.
-    del mp_array
-#   del pool, x
 
     function_list = np.asarray(function_list)
     print(function_list)
     print("The function_list occupies %d bytes\n" % function_list.nbytes)
     print("---- %s seconds ----" % (time.time() - start_time))
-#   breakpoint()
+    #   breakpoint()
 
     sec, thr, fourth = function_list_iteration(function_list)
 
@@ -150,5 +174,5 @@ if __name__ == "__main__":
     thirdDF.to_csv('third.out')
     fourthDF.to_csv('fourth.out')
 
-#   breakpoint()
+    #   breakpoint()
     print("---- %s seconds ----" % (time.time() - start_time))

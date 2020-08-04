@@ -18,7 +18,7 @@ The test files for water are included in the "fort_files" directory. It is neces
 
 Once you have changed the above fort files to those of your molecule (including the top line!), you can then run the program by submitting the packaged fcplot.pbs file -- `qsub fcplot.pbs`. Its directives may need to be changed depending on the hardware or software requirements of your supercomputer. 
 
-It can also be run locally though `python main.py`, though at least 16 GB of RAM are necessary.
+It can also be run locally though `python main.py -t local`, though at least 16 GB of RAM are necessary. Running the previous command without any arguments (or with any word other than "local") defaults to the supercomputer method.
 
 ## Output
 The script will generate three files, each corresponding to the output for the second, third, and fourth derivatives (second.out, third.out, fourth.out). These will be a CSV containing its index, displacement, and the energy. 

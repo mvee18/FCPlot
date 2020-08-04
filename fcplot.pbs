@@ -8,4 +8,4 @@ module load python
 
 cd ${PBS_O_WORKDIR}
 
-time ./flatten.py
+time ./main.py
