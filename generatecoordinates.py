@@ -15,11 +15,11 @@ def generate_second_coordinates(size):
     array = []
     for atom1 in range(size[0]):
         coordinate_list1 = []
-        for coordinate1 in range(size[0]):
+        for coordinate1 in range(3):
             atom_list1 = []
             for atom2 in range(size[0]):
                 coordinate_list2 = []
-                for coordinate2 in range(size[0]):
+                for coordinate2 in range(3):
                     coordinate_list2.append(coordinate2)
                 atom_list1.append(coordinate_list2)
             coordinate_list1.append(atom_list1)
@@ -78,26 +78,14 @@ second_coordinates("fort_files/fort.15")
 third_list = []
 
 def determine_atom(row, atom_number, item, array):
-    if int(array[row, atom_number, item]) // 3 == 0:
-        array[row, atom_number, item] = 0
-    elif int(array[row, atom_number, item]) // 3 == 1:
-        array[row, atom_number, item] = 1
-    elif int(array[row, atom_number, item]) // 3 == 2:
-        array[row, atom_number, item] = 2
-
+    array[row, atom_number, item] = int(array[row, atom_number, item]) // 3
 
 def determine_coordinate(row, coordinate_number, item, array):
-    if int(array[row, coordinate_number, item]) % 3 == 0:
-        array[row, coordinate_number, item] = 0
-    elif int(array[row, coordinate_number, item]) % 3 == 1:
-        array[row, coordinate_number, item] = 1
-    elif int(array[row, coordinate_number, item]) % 3 == 2:
-        array[row, coordinate_number, item] = 2
-
+    array[row, coordinate_number, item] = int(array[row, coordinate_number, item]) % 3
 
 def third_geometry():
     third_size = read_first_line("fort_files/fort.30")
-    num_of_jobs = third_size[0] ** 2
+    num_of_jobs = third_size[0] * 3
     for i in range(num_of_jobs):
         for j in range(num_of_jobs):
             for k in range(num_of_jobs):
@@ -107,6 +95,7 @@ def third_geometry():
     third_array = np.asarray(third_list)
 
     third_array_shape = third_array.shape
+    breakpoint()
 
     for row in range(third_array_shape[0]):
         for col in range(third_array_shape[1]):

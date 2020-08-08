@@ -17,7 +17,20 @@ function_list = []
 
 def generate_array(file):
     path = os.path.join(file)
-    return np.asarray(np.genfromtxt(path, skip_header=1))
+    try:
+        fort = np.asarray(np.genfromtxt(path, skip_header=1))
+        return fort
+
+    except ValueError:
+        with open(path, 'r') as fhand:
+            file_lines = [line[:-1] for line in fhand if line.strip() != '']
+
+        file_lines.pop(0)
+        mat_raw = [[float(term) for term in line.split()] for line in file_lines]
+        length = max(map(len, mat_raw))
+        y = np.array([xi + [None] * (length-len(xi)) for xi in mat_raw])
+        breakpoint()
+        return y
 
 
 # Put it all together in one beautiful function. DONE!
@@ -25,17 +38,23 @@ def array_matching(filename):
     fort_file = os.path.join("fort_files/" + filename)
     fort = generate_array(fort_file)
     fort_shape = fort.shape
+    print(fort_shape)
 
     if filename == "fort.15":
         coords = second_coordinates(fort_file)
+        print(coords)
         reshaped_coords = np.reshape(coords, (fort_shape[0], fort_shape[1], 4))
 
     elif filename == "fort.30":
         coords = third_geometry()
+        print(coords)
+        breakpoint()
         reshaped_coords = np.reshape(coords, (fort_shape[0], fort_shape[1], 3, 2))
 
     elif filename == "fort.40":
         coords = fourth_geometry()
+        print(coords)
+        breakpoint()
         reshaped_coords = np.reshape(coords, (fort_shape[0], fort_shape[1], 4, 2))
 
     else:
@@ -63,8 +82,8 @@ def iterate_arrays():
                             f2, c3 = third_array[thr_rows][thr_cols], third_coords[thr_rows][thr_cols]
                             f3, c4 = fourth_array[for_rows][for_cols], fourth_coords[for_rows][for_cols]
                             array.append([f1, f2, f3, c2, c3, c4])
-    #           break
-    #       break
+                break
+            break
 
     print("{} points generated. Proceeding to function creation.".format(len(array)))
     return np.asarray(array)
@@ -132,6 +151,7 @@ if __name__ == "__main__":
 
     mp_array = iterate_arrays()
     print("The array occupies %d bytes\n" % mp_array.nbytes)
+    breakpoint()
 
     if local_bool:  # if True from command_line().
         with mp.Pool() as pool:
