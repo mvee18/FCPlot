@@ -17,25 +17,48 @@ function_list = []
 
 def generate_array(file):
     path = os.path.join(file)
-    return np.asarray(np.genfromtxt(path, skip_header=1))
+    try:
+        fort = np.asarray(np.genfromtxt(path, skip_header=1))
+        return fort
+
+    except ValueError:
+        with open(path, 'r') as fhand:
+            file_lines = [line[:-1] for line in fhand if line.strip() != '']
+
+        file_lines.pop(0)
+        mat_raw = [[float(term) for term in line.split()] for line in file_lines]
+        length = max(map(len, mat_raw))
+        y = np.array([xi + [None] * (length-len(xi)) for xi in mat_raw])
+        return y
 
 
 # Put it all together in one beautiful function. DONE!
 def array_matching(filename):
     fort_file = os.path.join("fort_files/" + filename)
-    fort = generate_array(fort_file)
+    fort = generate_array(fort_file)    # This returns the padded out FC array if not an equal columns length.
     fort_shape = fort.shape
+    print(fort_shape)
 
     if filename == "fort.15":
         coords = second_coordinates(fort_file)
+        print(coords)
         reshaped_coords = np.reshape(coords, (fort_shape[0], fort_shape[1], 4))
 
     elif filename == "fort.30":
         coords = third_geometry()
-        reshaped_coords = np.reshape(coords, (fort_shape[0], fort_shape[1], 3, 2))
+        print(coords)
+        try:
+            reshaped_coords = np.reshape(coords, (fort_shape[0], fort_shape[1], 3, 2))
+
+        except ValueError:
+            coords = unequal_cols_coords(fort, coords)
+            reshaped_coords = np.reshape(coords, (fort_shape[0], fort_shape[1], 3, 2))
+            breakpoint()
 
     elif filename == "fort.40":
         coords = fourth_geometry()
+        print(coords)
+        breakpoint()
         reshaped_coords = np.reshape(coords, (fort_shape[0], fort_shape[1], 4, 2))
 
     else:
@@ -59,12 +82,13 @@ def iterate_arrays():
                 for thr_cols in range(third_shape[1]):
                     for for_rows in range(fourth_shape[0]):
                         for for_cols in range(fourth_shape[1]):
-                            f1, c2 = second_array[rows][cols], second_coords[rows][cols]
-                            f2, c3 = third_array[thr_rows][thr_cols], third_coords[thr_rows][thr_cols]
-                            f3, c4 = fourth_array[for_rows][for_cols], fourth_coords[for_rows][for_cols]
-                            array.append([f1, f2, f3, c2, c3, c4])
-    #           break
-    #       break
+                            if third_array[thr_rows][thr_cols] is not None:
+                                f1, c2 = second_array[rows][cols], second_coords[rows][cols]
+                                f2, c3 = third_array[thr_rows][thr_cols], third_coords[thr_rows][thr_cols]
+                                f3, c4 = fourth_array[for_rows][for_cols], fourth_coords[for_rows][for_cols]
+                                array.append([f1, f2, f3, c2, c3, c4])
+                            else:
+                                continue
 
     print("{} points generated. Proceeding to function creation.".format(len(array)))
     return np.asarray(array)
@@ -125,6 +149,16 @@ def command_line(argv):
             else:
                 return False
 
+def unequal_cols_coords(forces, coordinates):
+    force_shape = forces.shape
+    needed_num_of_coords = force_shape[0] * force_shape[1]
+    times_to_append = needed_num_of_coords - coordinates.shape[0]
+
+    for i in range(times_to_append):
+        coordinates = np.append(coordinates, [[[None, None], [None, None], [None, None]]])
+
+    return coordinates
+
 
 if __name__ == "__main__":
     # -t local or supercomputer by default
@@ -132,6 +166,7 @@ if __name__ == "__main__":
 
     mp_array = iterate_arrays()
     print("The array occupies %d bytes\n" % mp_array.nbytes)
+    breakpoint()
 
     if local_bool:  # if True from command_line().
         with mp.Pool() as pool:
