@@ -95,7 +95,6 @@ def third_geometry():
     third_array = np.asarray(third_list)
 
     third_array_shape = third_array.shape
-    breakpoint()
 
     for row in range(third_array_shape[0]):
         for col in range(third_array_shape[1]):
@@ -135,21 +134,11 @@ col_list = []
 third_energy_array = []
 
 def determine_fourth_atom(row, atom_number, item, fourth_array):
-    if int(fourth_array[row, atom_number, item]) // 3 == 0:
-        fourth_array[row, atom_number, item] = 0
-    elif int(fourth_array[row, atom_number, item]) // 3 == 1:
-        fourth_array[row, atom_number, item] = 1
-    elif int(fourth_array[row, atom_number, item]) // 3 == 2:
-        fourth_array[row, atom_number, item] = 2
+    fourth_array[row, atom_number, item] = int(fourth_array[row, atom_number, item]) // 3
 
 
 def determine_fourth_coordinate(row, coordinate_number, item, fourth_array):
-    if int(fourth_array[row, coordinate_number, item]) % 3 == 0:
-        fourth_array[row, coordinate_number, item] = 0
-    elif int(fourth_array[row, coordinate_number, item]) % 3 == 1:
-        fourth_array[row, coordinate_number, item] = 1
-    elif int(fourth_array[row, coordinate_number, item]) % 3 == 2:
-        fourth_array[row, coordinate_number, item] = 2
+    fourth_array[row, coordinate_number, item] = int(fourth_array[row, coordinate_number, item]) % 3
 
 
 fourth_list = []
@@ -158,7 +147,7 @@ fourth_list = []
 # FIXED: Second col loop was not correctly indented.
 def fourth_geometry():
     fourth_size = read_first_line("fort_files/fort.40")
-    num_of_jobs = fourth_size[0] ** 2
+    num_of_jobs = fourth_size[0] * 3
     for w in range(num_of_jobs):
         for x in range(num_of_jobs):
             for y in range(num_of_jobs):
